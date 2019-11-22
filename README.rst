@@ -20,12 +20,18 @@ This launch a snakemake pipeline. If you are familiar with snakemake, you can re
 
     snakemake -s fastqc.rules --cores 4 --stats stats.txt
 
-Or use :ref:`sequanix` interface.
+Or use `sequanix <https://sequana.readthedocs.io/en/master/sequanix.html>`_ interface.
 
 Requirements
 ~~~~~~~~~~~~
 
-.. include:: sequana_pipelines/fastqc/requirements.txt
+This pipelines requires:
+
+- fastqc
+- multiqc
+- snakemake
+
+.. include:: requirements.txt
 
 .. image:: https://raw.githubusercontent.com/sequana/sequana_fastqc/master/sequana_pipelines/fastqc/dag.png
 
