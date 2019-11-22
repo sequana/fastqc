@@ -31,7 +31,7 @@ This pipelines requires:
 - multiqc
 - snakemake
 
-.. include:: requirements.txt
+.. include:: ../requirements.txt
 
 .. image:: https://raw.githubusercontent.com/sequana/sequana_fastqc/master/sequana_pipelines/fastqc/dag.png
 
@@ -44,17 +44,17 @@ and then execute multiqc. A brief sequana summary report is also produced.
 
 
 Rules and configuration details
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Here is a documented configuration file :download:`../sequana/pipelines/fastqc/config.yaml` to be used with the pipeline. Each rule used in the pipeline may have a section in the
+Here is a documented configuration file :download:`../sequana_pipelines/fastqc/config.yaml` to be used with the pipeline. Each rule used in the pipeline may have a section in the
 configuration file. 
 
 
 FastQC
-^^^^^^^^^^^
+^^^^^^
 .. snakemakerule:: fastqc_dynamic
 
 mutliqc
-^^^^^^^^^^^^^^^
+^^^^^^^
 .. snakemakerule:: multiqc2
 
