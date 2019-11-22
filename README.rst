@@ -1,32 +1,33 @@
 :Overview: fastqc + multiqc 
-:Input: A set of FastQ files (paired or single-end)
-:Output: summary.html
+:Input: A set of FastQ files (paired or single-end) compressed or not
+:Output: an HTML file index.html (multiqc) and tree.html (individual fastqc report)
 
 Usage
-~~~~~~~
+~~~~~
 
 ::
 
-    sequana --pipeline fastqc -i . -o analysis
+    sequana_pipelines_fastqc --help
+    sequana_pipelines_fastqc --fastq-directory DATAPATH --run-mode local
+    sequana_pipelines_fastqc --fastq-directory DATAPATH --run-mode slurm
 
-This creates a directory **analysis**. You just need to execute the pipeline::
+This creates a directory **fastq**. You just need to execute the pipeline::
 
-    cd analysis
-    sh runme.sh
+    cd fastqc
+    sh fastqc.sh  # for a local run
 
-
-If you are familiar with snakemake, you can retrieve the fastqc.rules and config.yaml files and then execute the pipeline::
+This launch a snakemake pipeline. If you are familiar with snakemake, you can retrieve the fastqc.rules and config.yaml files and then execute the pipeline yourself with specific parameters::
 
     snakemake -s fastqc.rules --cores 4 --stats stats.txt
 
-Or use :ref:`sequanix_tutorial` interface.
+Or use :ref:`sequanix` interface.
 
 Requirements
-~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
 
-.. include:: ../sequana/pipelines/fastqc/requirements.txt
+.. include:: sequana_pipelines/fastqc/requirements.txt
 
-.. image:: https://raw.githubusercontent.com/sequana/sequana/master/sequana/pipelines/fastqc/dag.png
+.. image:: https://raw.githubusercontent.com/sequana/sequana_fastqc/master/sequana_pipelines/fastqc/dag.png
 
 
 Details
