@@ -71,8 +71,6 @@ setup(
         'sequana_pipelines.fastqc.data' : ['*.*'], 
         },
 
-    #namespace_package=['sequana'],
-
     zip_safe=False,
 
     entry_points = {'console_scripts':[

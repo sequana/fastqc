@@ -30,7 +30,7 @@ To join the project, please let us know on `github <https://github.com/sequana/s
 The Sequana fastqc pipeline
 ===========================
 
-.. include:: ../sequana_pipelines/fastqc/README.rst
+.. include:: ../README.rst
 
 
 

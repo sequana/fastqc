@@ -31,7 +31,6 @@ This pipelines requires:
 - multiqc
 - snakemake
 
-.. include:: ../requirements.txt
 
 .. image:: https://raw.githubusercontent.com/sequana/sequana_fastqc/master/sequana_pipelines/fastqc/dag.png
 
