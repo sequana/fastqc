@@ -2,14 +2,19 @@ import sys
 import os
 import argparse
 
-from sequana.pipelines_common import SlurmOptions, Colors, SnakemakeOptions
-from sequana.pipelines_common import PipelineManager
+from sequana.pipelines_common import *
+from sequana.snaketools import Module
+from sequana import logger
+logger.level = "INFO"
 
 col = Colors()
 
+NAME = "fastqc"
+m = Module(NAME)
+m.is_executable()
 
 class Options(argparse.ArgumentParser):
-    def __init__(self, prog="fastqc"):
+    def __init__(self, prog=NAME):
         usage = col.purple(
             """This script prepares the sequana pipeline fastqc layout to
             include the Snakemake pipeline and its configuration file ready to
@@ -35,9 +40,11 @@ class Options(argparse.ArgumentParser):
         so.add_options(self)
 
         # add a snakemake group of options to the parser
-        so = SnakemakeOptions()
+        so = SnakemakeOptions(working_directory=NAME)
         so.add_options(self)
 
+        so = InputOptions()
+        so.add_options(self)
 
         self.add_argument(
             "--run-mode",
@@ -49,13 +56,7 @@ class Options(argparse.ArgumentParser):
                 with SLURM scheduler"""
         )
 
-        pipeline_group = self.add_argument_group("pipeline")
-        pipeline_group.add_argument(
-            "--output-directory",
-            dest="outdir",
-            default="fastqc",
-            help="Where to save the FASTQC results (default fastqc/ )",
-        )
+        """pipeline_group = self.add_argument_group("pipeline")
         pipeline_group.add_argument(
             "--fastq-directory",
             dest="fastq_directory",
@@ -69,11 +70,10 @@ class Options(argparse.ArgumentParser):
             default="*fastq.gz",
             help="pattern for the input FastQ files (default  *fastq.gz)",
         )
-
+        """
 
 
 def main(args=None):
-    NAME = "fastqc"
     if args is None:
         args = sys.argv
 
@@ -87,7 +87,7 @@ def main(args=None):
     # fill the config file with input parameters
     cfg = manager.config.config
     cfg.input_pattern = options.input_pattern
-    cfg.input_directory = os.path.abspath(options.fastq_directory)
+    cfg.input_directory = os.path.abspath(options.input_directory)
 
     # finalise the command and save it; copy the snakemake. update the config
     # file and save it.

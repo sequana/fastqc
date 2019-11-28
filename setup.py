@@ -67,7 +67,7 @@ setup(
     # This is recursive include of data files
     exclude_package_data = {"": ["__pycache__"]},
     package_data = {
-        '': ['config.yaml', "fastqc.rules"],
+        '': ['config.yaml', "fastqc.rules", "*json", "requirements.txt"],
         'sequana_pipelines.fastqc.data' : ['*.*'], 
         },
 
