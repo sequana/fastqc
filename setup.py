@@ -52,7 +52,6 @@ setup(
     # package installation
     packages = ["sequana_pipelines.fastqc",
         'sequana_pipelines.fastqc.data' ],
-    # Note, however, that e.g. ./pipelines must be added
 
     install_requires = "sequana",
 
