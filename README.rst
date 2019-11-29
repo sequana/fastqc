@@ -1,6 +1,9 @@
-:Overview: fastqc + multiqc 
+This is is the **fastqc** pipeline from the Sequana projet
+
+:Overview: Runs fastqc and multiqc on a set of Sequencing data to produce control quality reports
 :Input: A set of FastQ files (paired or single-end) compressed or not
 :Output: an HTML file index.html (multiqc) and tree.html (individual fastqc report)
+:Status: production
 
 Usage
 ~~~~~
@@ -8,8 +11,8 @@ Usage
 ::
 
     sequana_pipelines_fastqc --help
-    sequana_pipelines_fastqc --fastq-directory DATAPATH --run-mode local
-    sequana_pipelines_fastqc --fastq-directory DATAPATH --run-mode slurm
+    sequana_pipelines_fastqc --input-directory DATAPATH --run-mode local
+    sequana_pipelines_fastqc --input-directory DATAPATH --run-mode slurm
 
 This creates a directory **fastq**. You just need to execute the pipeline::
 
@@ -27,9 +30,7 @@ Requirements
 
 This pipelines requires:
 
-- fastqc
-- multiqc
-- snakemake
+.. include:: ../sequana_pipelines/fastqc/requirements.txt
 
 
 .. image:: https://raw.githubusercontent.com/sequana/sequana_fastqc/master/sequana_pipelines/fastqc/dag.png
