@@ -9,7 +9,7 @@ about the code, usage or lack of information, please fill a report
 on `**Sequana** itself <https://github.com/sequana/sequana/issues>`_ indicating the pipeline name (We centralized all 
 pipelines issues on **Sequana** repository only so as to be more responsive).
 
-If you use **Sequana**, please do not forget to cite use:
+If you use **Sequana**, please do not forget to cite us:
 
     Cokelaer et al, (2017), 'Sequana': a Set of Snakemake NGS pipelines, Journal of
     Open Source Software, 2(16), 352, `JOSS DOI doi:10.21105/joss.00352 <http://www.doi2bib.org/bib/10.21105/joss.00352>`_
