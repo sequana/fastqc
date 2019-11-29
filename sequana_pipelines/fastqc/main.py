@@ -56,21 +56,6 @@ class Options(argparse.ArgumentParser):
                 with SLURM scheduler"""
         )
 
-        """pipeline_group = self.add_argument_group("pipeline")
-        pipeline_group.add_argument(
-            "--fastq-directory",
-            dest="fastq_directory",
-            default=".",
-            required=True,
-            help="Where to find the FastQ files (default current directory . ) ",
-        )
-        pipeline_group.add_argument(
-            "--input-pattern",
-            dest="input_pattern",
-            default="*fastq.gz",
-            help="pattern for the input FastQ files (default  *fastq.gz)",
-        )
-        """
 
 
 def main(args=None):
