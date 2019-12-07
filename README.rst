@@ -24,8 +24,7 @@ Usage
 ::
 
     sequana_pipelines_fastqc --help
-    sequana_pipelines_fastqc --input-directory DATAPATH --run-mode local
-    sequana_pipelines_fastqc --input-directory DATAPATH --run-mode slurm
+    sequana_pipelines_fastqc --input-directory DATAPATH
 
 This creates a directory **fastq**. You just need to execute the pipeline::
 
@@ -37,6 +36,30 @@ This launch a snakemake pipeline. If you are familiar with snakemake, you can re
     snakemake -s fastqc.rules --cores 4 --stats stats.txt
 
 Or use `sequanix <https://sequana.readthedocs.io/en/master/sequanix.html>`_ interface.
+
+
+Tutorial
+~~~~~~~~
+
+You can retrieve test data from sequana_fastqc (https://github.com/sequana_fastqc) or type::
+
+    wget https://raw.githubusercontent.com/sequana/sequana_fastqc/master/sequana_pipelines/fastqc/data/data_R1_001.fastq.gz
+    wget https://raw.githubusercontent.com/sequana/sequana_fastqc/master/sequana_pipelines/fastqc/data/data_R2_001.fastq.gz
+
+then, prepare the pipeline::
+
+    sequana_fastqc --input-directory .
+    cd fastqc
+    sh fastq.sh
+
+    # once done, remove temporary files (snakemake and others)
+    make clean
+
+Just open the HTML entry called index.html and browse the multiqc report. For
+individual reports, open the tree.html file. You will get expected images such
+as the following one:
+
+.. image:: https://raw.githubusercontent.com/sequana/sequana_fastqc/master/sequana_pipelines/doc/summary.png
 
 Requirements
 ~~~~~~~~~~~~
