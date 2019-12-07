@@ -59,7 +59,7 @@ Just open the HTML entry called index.html and browse the multiqc report. For
 individual reports, open the tree.html file. You will get expected images such
 as the following one:
 
-.. image:: https://raw.githubusercontent.com/sequana/sequana_fastqc/master/sequana_pipelines/doc/summary.png
+.. image:: https://github.com/sequana/sequana_fastqc/blob/master/doc/summary.png?raw=true
 
 Requirements
 ~~~~~~~~~~~~
