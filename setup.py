@@ -5,7 +5,7 @@ from setuptools import setup, find_namespace_packages
 
 _MAJOR               = 0
 _MINOR               = 9
-_MICRO               = 4
+_MICRO               = 5
 version              = '%d.%d.%d' % (_MAJOR, _MINOR, _MICRO)
 release              = '%d.%d' % (_MAJOR, _MINOR)
 
@@ -65,7 +65,8 @@ setup(
     zip_safe=False,
 
     entry_points = {'console_scripts':[
-        'sequana_pipelines_fastqc=sequana_pipelines.fastqc.main:main']
+        'sequana_pipelines_fastqc=sequana_pipelines.fastqc.main:main',
+        'sequana_fastqc=sequana_pipelines.fastqc.main:main']
     }
 
 )
