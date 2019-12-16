@@ -84,3 +84,7 @@ Rules and configuration details
 Here is the `latest documented configuration file <https://raw.githubusercontent.com/sequana/sequana_fastqc/master/sequana_pipelines/fastqc/config.yaml>`_
 to be used with the pipeline. Each rule used in the pipeline may have a section in the configuration file. 
 
+Changelog
+~~~~~~~~~
+
+0.9.6: add the readtag option

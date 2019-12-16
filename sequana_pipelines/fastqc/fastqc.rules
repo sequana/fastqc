@@ -44,6 +44,7 @@ comments = """<p><b>Number of samples:</b> {}    <br><b>Paired data:</b> {}<br><
 <a href="../tree.html">tree</a>    </p>    """.format(
     len(manager.samples.keys()) , manager.paired)
 
+
 rule multiqc:
     input: __multiqc__input
     output: __multiqc__output
