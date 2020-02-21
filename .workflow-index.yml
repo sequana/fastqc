@@ -1,0 +1,9 @@
+language: Snakemake 
+name: sequana_demultiplex
+description: Runs fastqc and multiqc on a set of Sequencing data to produce control quality reports
+url: https://github.com/sequana/sequana_fastqc/blob/master/sequana_pipelines/fastqc/fastqc.rules
+categories: [HTS] 
+authors:   
+    - firstname: Thomas
+      lastname: Cokelaer
+      email: thomas.cokelaer@pasteur.fr
