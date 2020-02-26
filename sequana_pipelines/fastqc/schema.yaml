@@ -20,6 +20,9 @@ mapping:
             "options":
                 type: str
                 required: False
+            "threads":
+                type: int
+                required: True
 
     "multiqc":
         type: map

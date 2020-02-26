@@ -37,36 +37,41 @@ __fastqc_samples__log = "samples/%s/fastqc.log" % manager.sample
 include: fastqc_dynamic("samples", manager)
 
 
-__multiqc__output = "multiqc/multiqc_report.html"
-__multiqc__input = expand(__fastqc_samples__output_done, sample=manager.samples)
 
 comments = """<p><b>Number of samples:</b> {}    <br><b>Paired data:</b> {}<br><b>Browse files here:</b>
-<a href="../tree.html">tree</a>    </p>    """.format(
+<a href="../tree.html">tree</a>        """.format(
     len(manager.samples.keys()) , manager.paired)
 
+from sequana_pipelines.fastqc import version as v2
+from sequana import version as v1
+comments += """<br><b><a href="https://sequana.readthedocs.io">Sequana version: </a></b>{}""".format(v1)
+comments += """<br><b><a href="https://github.com/sequana/sequana_fastqc">Sequana_fastqc version: </a></b>{}</p>""".format(v2)
 
-rule multiqc:
-    input: __multiqc__input
-    output: __multiqc__output
-    params:
-        inputdir = config['multiqc']['indir'],
-        outdir="multiqc",
-        config=sequana_data("multiqc_config.yaml", "../multiqc"),
-        options = " --comment \"{}\" ".format(comments) + config["multiqc"]["options"] 
-    shell:
-        # We let multiqc search for all modules without specifying a
-        # -m fastqc option, which fails otherwise
-        """
-        multiqc {params.inputdir} -o {params.outdir} -c {params.config} {params.options} 2> multiqc/multiqc.log
-        """
+
+# Multiqc rule
+__multiqc2__input = expand(__fastqc_samples__output_done, sample=manager.samples)
+__multiqc2__logs = "multiqc/multiqc.log"
+__multiqc2__output = "multiqc/multiqc_report.html"
+
+__multiqc2__indir = config['multiqc']['indir']
+__multiqc2__outdir = "multiqc"
+__multiqc2__config = "multiqc_config.yaml"
+# do not specify fastqc itself alone, otherwise it fails (feb 2020)
+__multiqc2__modules = ""
+
+config['multiqc']['options'] = config["multiqc"]["options"].replace("-f", " ") + \
+                               " --comment \"{}\" ".format(comments)
+
+include: sm.modules["multiqc2"]
+
 
 # Those rules takes a couple of seconds so no need for a cluster
-localrules: multiqc
+localrules: multiqc2
 
 
 onsuccess:
-    print("Please open the report index.html or {}".format(__multiqc__output))
-    shell("ln -f -s {} index.html".format(__multiqc__output))
+    print("Please open the report index.html or {}".format(__multiqc2__output))
+    shell("ln -f -s {} index.html".format(__multiqc2__output))
     shell("rm -f ./samples/*/*.done")
     shell("rm -f ./samples/*/*.log")
     shell("chmod -R g+w .")
@@ -83,11 +88,25 @@ onsuccess:
 
     from sequana.snaketools import OnSuccessCleaner
     sc = OnSuccessCleaner()
-    sc.files_to_remove.append("fastqc.rules")
-    toremove = config["onsuccess"]["toclean"]
+    toremove = " slurm*out fastqc.rules config.yaml stats.txt"
     sc.files_to_remove.append(toremove)
     sc.add_makefile()
     print("Once done, please clean up the directory using\n'make clean'")
+
+    with open(__multiqc2__output, "r") as fin:
+        with open(__multiqc2__output+"2", "w") as fout:
+            line = fin.readline()
+            while line:
+                if """<a href="http://multiqc.info" target="_blank">""" in     line:
+                    line = fin.readline() # read the image
+                    line = fin.readline() # read the ending </a> tag
+                else:
+                    fout.write(line)
+                line = fin.readline() # read the next line
+    shell("mv {} {}".format(__multiqc2__output +"2", __multiqc2__output))
+
+
+
 
 onerror:
     print("An error occurred. See message above.")

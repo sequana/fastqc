@@ -86,5 +86,13 @@ to be used with the pipeline. Each rule used in the pipeline may have a section 
 
 Changelog
 ~~~~~~~~~
-
-0.9.6: add the readtag option
+========= ====================================================================
+Version   Description
+========= ====================================================================
+0.9.7     * check existence of input directory in main.py
+          * add a logo 
+          * fix schema
+          * add multiqc_config
+          * add sequana + sequana_fastqc version
+0.9.6     add the readtag option
+========= ====================================================================

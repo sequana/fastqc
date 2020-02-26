@@ -70,10 +70,10 @@ def main(args=None):
     # fill the config file with input parameters
     cfg = manager.config.config
     cfg.input_pattern = options.input_pattern
-
-
     cfg.input_readtag = options.input_readtag
     cfg.input_directory = os.path.abspath(options.input_directory)
+
+    manager.exists(cfg.input_directory)
 
     # finalise the command and save it; copy the snakemake. update the config
     # file and save it.

@@ -36,7 +36,3 @@ multiqc:
     options: '-p -f '
     indir: "."
 
-##############################################################################
-#
-onsuccess:
-    toclean: " slurm*out fastqc.rules config.yaml stats.txt "
