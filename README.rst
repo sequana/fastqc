@@ -41,7 +41,7 @@ Or use `sequanix <https://sequana.readthedocs.io/en/master/sequanix.html>`_ inte
 Tutorial
 ~~~~~~~~
 
-You can retrieve test data from sequana_fastqc (https://github.com/sequana_fastqc) or type::
+You can retrieve test data from sequana_fastqc (https://github.com/sequana/sequana_fastqc) or type::
 
     wget https://raw.githubusercontent.com/sequana/sequana_fastqc/master/sequana_pipelines/fastqc/data/data_R1_001.fastq.gz
     wget https://raw.githubusercontent.com/sequana/sequana_fastqc/master/sequana_pipelines/fastqc/data/data_R2_001.fastq.gz
@@ -89,6 +89,7 @@ Changelog
 ========= ====================================================================
 Version   Description
 ========= ====================================================================
+0.9.8     * add missing multi_config file
 0.9.7     * check existence of input directory in main.py
           * add a logo 
           * fix schema
