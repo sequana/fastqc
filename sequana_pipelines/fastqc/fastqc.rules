@@ -87,24 +87,10 @@ onsuccess:
     print("To do so, you can use the Makefile by typing 'Makefile clean'")
 
     from sequana.snaketools import OnSuccessCleaner
-    sc = OnSuccessCleaner()
-    toremove = " slurm*out fastqc.rules config.yaml stats.txt"
-    sc.files_to_remove.append(toremove)
+    sc = OnSuccessCleaner("fastqc")
     sc.add_makefile()
-    print("Once done, please clean up the directory using\n'make clean'")
 
-    with open(__multiqc2__output, "r") as fin:
-        with open(__multiqc2__output+"2", "w") as fout:
-            line = fin.readline()
-            while line:
-                if """<a href="http://multiqc.info" target="_blank">""" in     line:
-                    line = fin.readline() # read the image
-                    line = fin.readline() # read the ending </a> tag
-                else:
-                    fout.write(line)
-                line = fin.readline() # read the next line
-    shell("mv {} {}".format(__multiqc2__output +"2", __multiqc2__output))
-
+    sm.clean_multiqc(__multiqc2__output)
 
 
 
