@@ -2,39 +2,20 @@ import sys
 import os
 import argparse
 
-from sequana.pipelines_common import *
-from sequana.snaketools import Module
-from sequana import logger
-logger.level = "INFO"
+from sequana_pipetools.options import *
+from sequana_pipetools.misc import Colors
+from sequana_pipetools.info import sequana_epilog, sequana_prolog
 
 col = Colors()
 
 NAME = "fastqc"
-m = Module(NAME)
-m.is_executable()
 
 
 class Options(argparse.ArgumentParser):
-    def __init__(self, prog=NAME):
-        usage = col.purple(
-            """This script prepares the sequana pipeline fastqc layout to
-            include the Snakemake pipeline and its configuration file ready to
-            use.
-
-            In practice, it copies the config file and the pipeline into a
-            directory (fastqc) together with an executable script
-
-            For a local run, use :
-
-                sequana_pipelines_fastqc --input-directory PATH_TO_DATA --run-mode local
-
-            For a run on a SLURM cluster:
-
-                sequana_pipelines_fastqc --input-directory PATH_TO_DATA --run-mode slurm
-
-        """
-        )
+    def __init__(self, prog=NAME, epilog=None):
+        usage = col.purple(sequana_prolog.format(**{"name": NAME}))
         super(Options, self).__init__(usage=usage, prog=prog, description="",
+            epilog=epilog,
             formatter_class=argparse.ArgumentDefaultsHelpFormatter
         )
         # add a new group of options to the parser
@@ -56,12 +37,21 @@ def main(args=None):
     if args is None:
         args = sys.argv
 
-    if "--version" in sys.argv:
-        print_version(NAME)
-        sys.exit(0)
+    # whatever needs to be called by all pipeline before the options parsing
+    from sequana_pipetools.options import init_pipeline
+    init_pipeline(NAME)
 
-    options = Options(NAME).parse_args(args[1:])
+    # option parsing including common epilog
+    options = Options(NAME, epilog=sequana_epilog).parse_args(args[1:])
 
+    from sequana.snaketools import Module
+    m = Module(NAME)
+    m.is_executable()
+
+    from sequana import logger
+    from sequana.pipelines_common import PipelineManager
+    logger.level = "INFO"
+    # the real stuff is here
     manager = PipelineManager(options, NAME)
 
     # create the beginning of the command and the working directory
