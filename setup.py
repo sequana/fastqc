@@ -51,7 +51,7 @@ setup(
     packages = ["sequana_pipelines.fastqc",
         'sequana_pipelines.fastqc.data' ],
 
-    install_requires = ["sequana_pipetools>=0.2", "sequana>=0.8.0"],
+    install_requires = ["sequana_pipetools>=0.2", "sequana>=0.8.4"],
 
     # This is recursive include of data files
     exclude_package_data = {"": ["__pycache__"]},
