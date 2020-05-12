@@ -49,10 +49,10 @@ def main(args=None):
     m.is_executable()
 
     from sequana import logger
-    from sequana.pipelines_common import PipelineManager
-    logger.level = "INFO"
+    from sequana.pipelines_common import SequanaManager
+    logger.level = options.level
     # the real stuff is here
-    manager = PipelineManager(options, NAME)
+    manager = SequanaManager(options, NAME)
 
     # create the beginning of the command and the working directory
     manager.setup()

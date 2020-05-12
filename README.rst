@@ -91,6 +91,8 @@ Version   Description
 ========= ====================================================================
 0.9.11    * now depends on sequana_pipetools instead of sequana.pipelines to 
             speed up --help calls
+          * new summary.html report created with pipeline summary
+          * new rule (plotting)
 0.9.10    * simplify the onsuccess section
 0.9.9     * add missing png and pipeline (regression bug)
 0.9.8     * add missing multi_config file

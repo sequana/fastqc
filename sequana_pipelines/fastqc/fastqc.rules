@@ -17,14 +17,11 @@ exec(open(sequana.modules["fastqc_dynamic"], "r").read())
 
 # A convenient manager
 manager = sm.PipelineManager("fastqc", config)
-manager.setup(globals(), mode="warning")
-
-import matplotlib
-matplotlib.use('Agg')
+manager.setup(globals(), mode="error")
 
 
 rule pipeline:
-    input: "multiqc/multiqc_report.html"
+    input: "multiqc/multiqc_report.html", ".sequana/rulegraph.svg", "summary.png"
 
 
 # FASTQC on input data set
@@ -63,34 +60,74 @@ config['multiqc']['options'] = config["multiqc"]["options"].replace("-f", " ") +
 include: sm.modules["multiqc2"]
 
 
+__rulegraph__input = manager.snakefile
+__rulegraph__output = ".sequana/rulegraph.svg"
+__rulegraph__mapper = {"multiqc2":"multiqc/multiqc_report.html"}
+include: sm.modules['rulegraph']
+localrules: rulegraph
+
+
+rule plotting:
+    input: expand(__fastqc_samples__output_done, sample=manager.samples)
+    output: "summary.png"
+    run:
+        import glob
+        from sequana.fastqc import FastQC
+        filenames = glob.glob("samples/*/*.zip")
+        f = FastQC()
+        for sample in manager.samples:
+            filenames = glob.glob("samples/{}/*zip".format(sample))
+            filenames = sorted(filenames)
+            assert len(filenames) in [1,2]
+            f.read_sample(filenames[0], sample)
+        f.plot_sequence_quality()
+        from pylab import savefig, gcf
+        f = gcf()
+        f.set_size_inches(10,6)
+        savefig(output[0], dpi=200)
+
+
 # Those rules takes a couple of seconds so no need for a cluster
-localrules: multiqc2
+localrules: multiqc2, rulegraph
 
 
 onsuccess:
-    print("Please open the report index.html or {}".format(__multiqc2__output))
     shell("ln -f -s {} index.html".format(__multiqc2__output))
     shell("rm -f ./samples/*/*.done")
     shell("rm -f ./samples/*/*.log")
     shell("chmod -R g+w .")
 
-
+    # Create the tree.html file
     from sequana.utils.tree import HTMLDirectory
     hh = HTMLDirectory(".", pattern="fastqc.html")
     with open("tree.html", "w") as fout:
         fout.write(hh.get_html())
 
-    print("A directory browser is stored in the file tree.html (Note the dot).")
-    print("You may want to delete the .snakemake directory, fastqc.rules and config.yaml files.")
-    print("To do so, you can use the Makefile by typing 'Makefile clean'")
+    from sequana import logger
+    logger.level = "INFO"
 
-    from sequana.snaketools import OnSuccessCleaner
-    sc = OnSuccessCleaner("fastqc")
-    sc.add_makefile()
+    # This should create the stats plot and the Makefile
+    manager.teardown()
+    manager.clean_multiqc(__multiqc2__output)
 
-    sm.clean_multiqc(__multiqc2__output)
+    from sequana.modules_report.summary import SummaryModule2
+    data = {
+            "name": manager.name,
+            "rulegraph": __rulegraph__output,
+            "stats": "stats.txt"
+         }
 
+    contents = """<h2> General information</h2>"""
+    image = SummaryModule2.png_to_embedded_png("dummy", "summary.png", style="align:center; width:60%; height:40%")
 
+    contents += "<div>The following image shows the overall quality of your samples (R1 only). <br></div> <div>{}</div>".format(image)
+    #""" <div><img style="align:center; width:50%; height:50%" src="summary.png"></div> """
+    contents += """Please look at the <b><a href="multiqc/multiqc_report.html">multiqc report</a></b> for more details about your run."""
+    contents += """<h2> Individual fastqc HTML reports for each sample</h2>"""
+    contents += hh.get_html()
+    s = SummaryModule2(data, intro=contents)
+    shell("rm -rf rulegraph")   # embedded in report
+    shell("rm -rf summary.png") # embedded in report
 
 onerror:
     print("An error occurred. See message above.")
