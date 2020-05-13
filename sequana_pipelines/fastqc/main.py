@@ -32,25 +32,36 @@ class Options(argparse.ArgumentParser):
         so = GeneralOptions()
         so.add_options(self)
 
+    def parse_args(self, *args):
+        args_list = list(*args)
+        if "--from-project" in args_list:
+            if len(args_list)>2:
+                msg = "WARNING [sequana]: With --from-project option, " + \
+                        "pipeline and data-related options will be ignored."
+                print(col.error(msg))
+            for action in self._actions:
+                if action.required is True:
+                    action.required = False
+        options = super(Options, self).parse_args(*args)
+        return options
+
+
 
 def main(args=None):
+
     if args is None:
         args = sys.argv
 
     # whatever needs to be called by all pipeline before the options parsing
-    from sequana_pipetools.options import init_pipeline
-    init_pipeline(NAME)
+    from sequana_pipetools.options import before_pipeline
+    before_pipeline(NAME)
 
     # option parsing including common epilog
     options = Options(NAME, epilog=sequana_epilog).parse_args(args[1:])
 
-    from sequana.snaketools import Module
-    m = Module(NAME)
-    m.is_executable()
 
-    from sequana import logger
     from sequana.pipelines_common import SequanaManager
-    logger.level = options.level
+
     # the real stuff is here
     manager = SequanaManager(options, NAME)
 
@@ -58,12 +69,13 @@ def main(args=None):
     manager.setup()
 
     # fill the config file with input parameters
-    cfg = manager.config.config
-    cfg.input_pattern = options.input_pattern
-    cfg.input_readtag = options.input_readtag
-    cfg.input_directory = os.path.abspath(options.input_directory)
+    if options.from_project is None:
+        cfg = manager.config.config
+        cfg.input_pattern = options.input_pattern
+        cfg.input_readtag = options.input_readtag
+        cfg.input_directory = os.path.abspath(options.input_directory)
 
-    manager.exists(cfg.input_directory)
+        manager.exists(cfg.input_directory)
 
     # finalise the command and save it; copy the snakemake. update the config
     # file and save it.
