@@ -129,8 +129,8 @@ onsuccess:
     df = df.T
     df.drop(['File type', "Encoding", "Sequences flagged as poor quality"], 
         axis=1, inplace=True)
-    df['mean_quality'] = int(df['mean_quality']*100)/100.
-    df['total_deduplicated_percentage'] = int(df['total_deduplicated_percentage']*100)/100.
+    df['mean_quality'] = [int(float(x)*100)/100 for x in df['mean_quality']]
+    df['total_deduplicated_percentage'] = [int(float(x)*100)/100 for x in df['total_deduplicated_percentage']]
     df = df.reset_index()
     df = df.rename({
             "index": "sample", 

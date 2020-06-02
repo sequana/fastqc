@@ -2,7 +2,7 @@ This is is the **fastqc** pipeline from the `Sequana <https://sequana.readthedoc
 
 :Overview: Runs fastqc and multiqc on a set of Sequencing data to produce control quality reports
 :Input: A set of FastQ files (paired or single-end) compressed or not
-:Output: an HTML file index.html (multiqc) and tree.html (individual fastqc report)
+:Output: an HTML file summary.html (individual fastqc report)
 :Status: production
 :Citation: Cokelaer et al, (2017), 'Sequana': a Set of Snakemake NGS pipelines, Journal of Open Source Software, 2(16), 352, JOSS DOI https://doi:10.21105/joss.00352
 
@@ -55,9 +55,8 @@ then, prepare the pipeline::
     # once done, remove temporary files (snakemake and others)
     make clean
 
-Just open the HTML entry called index.html and browse the multiqc report. For
-individual reports, open the tree.html file. You will get expected images such
-as the following one:
+Just open the HTML entry called summary.html. A multiqc report is also available. 
+You will get expected images such as the following one:
 
 .. image:: https://github.com/sequana/sequana_fastqc/blob/master/doc/summary.png?raw=true
 
@@ -89,6 +88,7 @@ Changelog
 ========= ====================================================================
 Version   Description
 ========= ====================================================================
+0.9.14    * round up some statistics in the main table 
 0.9.13    * improve the summary HTML report
 0.9.12    * implemented new --from-project option
 0.9.11    * now depends on sequana_pipetools instead of sequana.pipelines to 
