@@ -39,7 +39,7 @@ def test_full():
 
         stat = subprocess.call("sh fastqc.sh".split(), cwd=wk)
 
-        assert os.path.exists(wk + "/index.html")
+        assert os.path.exists(wk + "/summary.html")
         assert os.path.exists(wk + "/tree.html")
         assert os.path.exists(wk + "/multiqc/multiqc_report.html")
 

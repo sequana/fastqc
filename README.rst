@@ -89,6 +89,7 @@ Changelog
 ========= ====================================================================
 Version   Description
 ========= ====================================================================
+0.9.13    * improve the summary HTML report
 0.9.12    * implemented new --from-project option
 0.9.11    * now depends on sequana_pipetools instead of sequana.pipelines to 
             speed up --help calls

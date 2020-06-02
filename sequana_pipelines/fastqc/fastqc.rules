@@ -54,7 +54,7 @@ __multiqc2__config = "multiqc_config.yaml"
 # do not specify fastqc itself alone, otherwise it fails (feb 2020)
 __multiqc2__modules = ""
 
-config['multiqc']['options'] = config["multiqc"]["options"].replace("-f", " ") + \
+config['multiqc']['options'] = "-m fastqc " + config["multiqc"]["options"].replace("-f", " ") + \
                                " --comment \"{}\" ".format(comments)
 
 include: sm.modules["multiqc2"]
@@ -67,12 +67,17 @@ include: sm.modules['rulegraph']
 localrules: rulegraph
 
 
-rule plotting:
+rule plotting_and_stats:
     input: expand(__fastqc_samples__output_done, sample=manager.samples)
-    output: "summary.png"
+    output: "summary.png", "summary.json"
     run:
         import glob
         from sequana.fastqc import FastQC
+        from sequana.summary import Summary
+        from sequana_pipelines.fastqc import version
+        summary = Summary("fastqc", caller="sequana_fastqc", sample_name="multi samples")
+        summary.description = "summary sequana_fastqc pipeline"
+        summary.pipeline_version = version
         filenames = glob.glob("samples/*/*.zip")
         f = FastQC()
         for sample in manager.samples:
@@ -80,6 +85,9 @@ rule plotting:
             filenames = sorted(filenames)
             assert len(filenames) in [1,2]
             f.read_sample(filenames[0], sample)
+            summary.data[sample] = f.fastqc_data[sample]['basic_statistics']
+        summary.to_json("summary.json")
+
         f.plot_sequence_quality()
         from pylab import savefig, gcf
         f = gcf()
@@ -92,12 +100,12 @@ localrules: multiqc2, rulegraph
 
 
 onsuccess:
-    shell("ln -f -s {} index.html".format(__multiqc2__output))
+    #shell("ln -f -s {} index.html".format(__multiqc2__output))
     shell("rm -f ./samples/*/*.done")
     shell("rm -f ./samples/*/*.log")
     shell("chmod -R g+w .")
 
-    # Create the tree.html file
+    # Create the tree.html file with all fastqc reports
     from sequana.utils.tree import HTMLDirectory
     hh = HTMLDirectory(".", pattern="fastqc.html")
     with open("tree.html", "w") as fout:
@@ -110,6 +118,51 @@ onsuccess:
     manager.teardown()
     manager.clean_multiqc(__multiqc2__output)
 
+    # Now, the main HTML report
+    import pandas as pd
+    from sequana.utils.datatables_js import DataTable
+    import json
+
+    # Summary table with links towards fastqc 
+    data = json.load(open("summary.json", "r"))
+    df = pd.DataFrame(data['data'])
+    df = df.T
+    df.drop(['File type', "Encoding", "Sequences flagged as poor quality"], 
+        axis=1, inplace=True)
+    df['mean_quality'] = int(df['mean_quality']*100)/100.
+    df['total_deduplicated_percentage'] = int(df['total_deduplicated_percentage']*100)/100.
+    df = df.reset_index()
+    df = df.rename({
+            "index": "sample", 
+            "total_deduplicated_percentage": "duplicated (%)"}, axis=1)
+    df['link'] = ["samples/{}/{}_R1_001_fastqc.html".format(sample, sample) for sample in df['sample']]
+    datatable = DataTable(df, 'fastqc', index=False)
+    datatable.datatable.datatable_options = {'paging': 'false',
+                                              'buttons': ['copy', 'csv'],
+                                             'bSort': 'true',
+                                            'dom':"BRSPfrti"
+                                            }
+    datatable.datatable.set_links_to_column('link', 'sample')
+    js = datatable.create_javascript_function()
+    htmltable = datatable.create_datatable()
+
+    # The summary table at the top
+    from sequana_pipelines.fastqc import version as vv
+    df_general = pd.DataFrame({
+        "samples": len(manager.samples), 
+        "paired": manager.paired, 
+        "sequana_fastqc_version": vv}, index=["summary"])
+
+    datatable = DataTable(df_general.T, 'general', index=True)
+    datatable.datatable.datatable_options = {'paging': 'false',
+                                            'bFilter': 'false',
+                                             'bInfo': 'false',
+                                              'header': 'false',
+                                             'bSort': 'true'}
+    js2 = datatable.create_javascript_function()
+    htmltable2 = datatable.create_datatable(style="width: 20%; float:left" )
+
+
     from sequana.modules_report.summary import SummaryModule2
     data = {
             "name": manager.name,
@@ -117,14 +170,26 @@ onsuccess:
             "stats": "stats.txt"
          }
 
-    contents = """<h2> General information</h2>"""
-    image = SummaryModule2.png_to_embedded_png("dummy", "summary.png", style="align:center; width:60%; height:40%")
 
-    contents += "<div>The following image shows the overall quality of your samples (R1 only). <br></div> <div>{}</div>".format(image)
-    #""" <div><img style="align:center; width:50%; height:50%" src="summary.png"></div> """
-    contents += """Please look at the <b><a href="multiqc/multiqc_report.html">multiqc report</a></b> for more details about your run."""
+    # Here the is main HTML page report
+    contents = "<h2> General information</h2>"
+    contents += """<div style="float:left; width:30%">{}</div>""".format(js2 + htmltable2)
+
+    image = SummaryModule2.png_to_embedded_png("dummy", "summary.png", 
+                style="width:80%; height:40%")
+
+    contents += '<div style="float:right; width:65%">The following image shows the overall quality of your samples (R1 only). <br>{}</div>'.format(image)
+
+    # the main table
+    contents += """<div style="clear:both"></div>"""
+    contents += "<br><hr><div>Here is a summary for all the samples. The CSV button allows you to export the basic statistics.  {}</div>".format(js + htmltable)
+    contents += """<hr>Please look at the <b><a href="multiqc/multiqc_report.html">multiqc report</a></b> for more details about your run."""
+
     contents += """<h2> Individual fastqc HTML reports for each sample</h2>"""
     contents += hh.get_html()
+
+
+
     s = SummaryModule2(data, intro=contents)
     shell("rm -rf rulegraph")   # embedded in report
     shell("rm -rf summary.png") # embedded in report
