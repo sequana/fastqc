@@ -88,6 +88,7 @@ Changelog
 ========= ====================================================================
 Version   Description
 ========= ====================================================================
+0.9.15    * For the HTML reports, takes into account samples with zero reads
 0.9.14    * round up some statistics in the main table 
 0.9.13    * improve the summary HTML report
 0.9.12    * implemented new --from-project option

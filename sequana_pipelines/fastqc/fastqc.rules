@@ -83,9 +83,20 @@ rule plotting_and_stats:
         for sample in manager.samples:
             filenames = glob.glob("samples/{}/*zip".format(sample))
             filenames = sorted(filenames)
-            assert len(filenames) in [1,2]
-            f.read_sample(filenames[0], sample)
-            summary.data[sample] = f.fastqc_data[sample]['basic_statistics']
+            assert len(filenames) in [0, 1,2]
+            if len(filenames) != 0:
+                f.read_sample(filenames[0], sample)
+                summary.data[sample] = f.fastqc_data[sample]['basic_statistics']
+                print(f.fastqc_data[sample]['basic_statistics'])
+            else:
+                summary.data[sample] = {
+                    'Filename': 'No fastqc found', 
+                    'File type': 'Conventional base calls', 
+                    'Encoding': 'Sanger / Illumina 1.9', 
+                    'Total Sequences': 0, 
+                    'Sequences flagged as poor quality': 0.0, 
+                    'Sequence length': '0', '%GC': 0, 'total_deduplicated_percentage': 0, 
+                    'mean_quality': 0, 'avg_sequence_length': 0}
         summary.to_json("summary.json")
 
         f.plot_sequence_quality()
