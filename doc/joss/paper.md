@@ -1,5 +1,5 @@
 ---
-title: "Demultiplex and check quality of sequencing data in production using Sequana NGS pipelines"
+title: "Demultiplex and check quality of sequencing data in production using sequana_fastqc and sequana_demultiplex pipelines"
 tags:
   - snakemake
   - Illumina
@@ -7,34 +7,87 @@ tags:
   - demultiplexing
   - singularity
 authors:
+ - name: Etienne Kornobis
+   affiliation: "1,2"
+ - name: Laure Lemee
+   affiliation: "2"
  - name: Thomas Cokelaer
    orcid: 0000-0001-6286-1138
    affiliation: "1,2"
- - name: Etienne Kornobis
-   affiliation: "1,2"
 affiliations:
- - name: "Institut Pasteur - Bioinformatics and Biostatistics Hub - C3BI, USR 3756 IP CNRS - Paris, France"
+ - name: "Hub de Bioinformatique et Biostatistique – Département Biologie Computationnelle, Institut Pasteur, USR 3756 CNRS, Paris, France"
    index: 1
- - name: "Institut Pasteur - Biomics Pole - Paris, France"
+ - name: "Plate-forme Technologique Biomics – Centre de Ressources et Recherches Technologiques (C2RT), Institut Pasteur, Paris, France"
    index: 2
+
+
+
 date: 2 August 2020
 bibliography: paper.bib
 ---
 
 # Summary
 
-Sequencing facilities that generated Terabytes of sequencing data rely on a few tools to perform so-called base calling and quality controls. Some sequencers from the Illumina series perform base calling auto;atically and generates FastQ files ready-to-use for bioinrmatics analysis such as variant calling, genome assembly, etc. Some sequencers (e.g. NextSeq) do not generate such files auto;atically and one first need to perform the base calling. This also performs the demultiplexing: from a sample sheet that describes the design of the experiments, sample and index are used to create the FastQ. THis is achieve by the Illu;ina tool called bcl2fastq [@bcl2fastq]. Once FastQ files are available (directly or after the de;ultiplexing), a very standard tools used by ;ost facilities is to check the quality of the data with a tool called fastqc [@fastqc:xxxx]. 
+The field of genomics has reached a mature stage where complete human sequencing can now be performed routinely. Recent pendemic of the SARS-covid virus has shown the power of sequencing to study the evolution of a virus on a world wide scale taking into account mutation of a virus as it spread the world. The sequencing techonologies used througout the world currently span short and long read technologies. The first one is mostly based on the Illumina Sequencers while the second are based on Pacbio and Nanopore technologies. Irrespective of the technology used, the data useful for subsequent analysis is in the form of FastQ files. Surprinsingly, those files are simply text-files storing the sequences that have been generated together with their quality at each position. The simplicity of such format led to a plethora or more or less complex analysis tools used in the field of bioinformatics.
 
-Facilities usually have those tools in place for years and are part of a daily tasks, usually auto;atised. Yetm new platforms, or researchers that receive those data occasionally or for the first time, may not know what to do. The yield of data generated being larger, cluster are required. 
+The short-read technology is currently led by Illumina; amongst the sequencers a few of them (e.g. NextSeq) do not provide the FastQ automatically. Instead, raw data are provided. Before undergoing any analysis, a so-called base-calling is required. This is achieve by a tool provided by Illumina, which is called blc2fastq [@bcl2fastq], wwhich will be discussed hereafter.  Once this tool has generated the FastQ (automatically or not), the first check performed by eihter experimentalist or analysists is to check the quality of the data. 
 
-Here, we described two pipelines that have been put in place zithin the Sequqna framework: sequana_demultiplex and sequana_fastqc. They are used in production within a sequencing platform and can be used by non-expert users. 
+Most research and / or production facilities that are involved in Sequencing
+then perform qulaity check of the different samples using FastQC [@Andrews2010].  
+This tools provide useful insights. The main goal being to check that the overall quality of the reads 
+is as expected. 
 
-## sequana_demultiplex
+Most production facilities already have their own pipeline with FastQC or
+home-made fastqc tools. Yet, most researchers discovering genomics (students,
+postdoc, etc) would face common issues: where to find the tools, how to
+demultiplex the data (if needed), how to get simple plot that summarizes the
+fastqc results of tens or hundreds of samples, what are the main sanity checks
+to perform, how to run the tools on a cluster, etc
 
-## sequana_fastqc
+Here we the sequana\_fastqc Snakemake pipeline that is available within the Sequana framework [@Cokelaer2017]. They are used in production within a sequencing platform and can be used by non-expert users. We also provide a tool that wraps the bcl2fastq tool providing the same API to run locally or on a cluster. 
 
-**Sequana** is a Python-based software dedicated to the development of Next Generation Sequencing (NGS) pipelines.
-We use the Snakemake [@snakemake:2012] framework to design our pipelines, which eases the decomposition of pipelines into modular sub-units. We currently have 7 pipelines covering quality control, variant calling, long-reads quality, de-novo and RNA-seq analysis (see https://sequana.readthedocs.io for details). Our pipelines are associated with HTML reports based on JINJA templating and Javascript. The reports are used to store the results of a pipelines but also materials required to reproduce the results. **Sequana** is also a Python library that provides tools to perform various analysis tasks (e.g., variant call filtering). Some of the library components provide original tools that are also available as standalone applications. For instance a fast taxonomic analysis based on Kraken [@kraken] as well as a tool to perform exhaustive coverage analysis [@coverage:2016] (bottom right panel in the image here below).
+# Statement of need
+
+sequana\_demultiplex and sequana\_fastqc enables simple base-calling of raw
+Illumin data and quality assessment of any type of FastQ sequencing data sets,
+either locally or on clusters. 
+
+
+The pipelines are designed to be used by any persons involved in Sequencing
+platform. It is used in productionby engineers, lab personnel, researchers. The
+main interest is that it provide fastqc for each samples, summarizing the
+results with MultiQC plugins, and provide a single HTML entry point. 
+
+
+
+
+
+# Installation, usage, reproducibilty
+
+One of the key feature of the two pipelines presented here abobe is to allow an
+easy an quick deployment of the tools, especially after bug fixes or new
+features implementation. 
+
+The first step consists in installation the Sequana library. This can be achieve
+in two ways. First, since Sequana is a Python library, one can simply install it
+using the standard procedure. All releases are available on pypi.org, therefore
+the main library can be installed using 
+
+```shell
+   pip install sequana
+```
+
+Second, since sequana is available on Bioconda [@Gruning2018]
+
+
+    sequana_fastqc
+    cd fastqc
+    sh fastqc.sh
+
+
+Example on a cluster
+
+
 
 **Sequana** is an open source project (https://github.com/sequana/sequana). It is developed with the aim
 of simplifying the development of new tools (for developers) and the deployment of the pipelines (for users).
@@ -45,14 +98,25 @@ Finally, for end-users, we also developed a Graphical interface called **Sequani
 
 
 
-![](barcodes_hiseq_bad_lane.png)
-![](barcodes_hiseq_good.png)
+![caption example.\label{fig:barcodebad}](barcodes_hiseq_bad_lane)
+
+![caption example.\label{fig:barcodegood}](barcodes_hiseq_good.png)
+
 ![](summary_hiseq_bad_lane.png)
+
 ![](summary_hiseq_good.png)
 
 
-# Future works
+reproducibility: sequana is on bioconda, the pipelines are on pypi with
+release version. The third-party tools are on bioconda (fastqc) and within a
+singularity (fastqc and bcl2fastq).
 
-**Sequana** is an on-going project. Although the project has reached a mature stage with stable pipelines, new pipelines will be including on demand or based on new technologies.
+# Acknowledgments
+
+We acknowledge contributions from ....
+
 
 # References
+
+
+
