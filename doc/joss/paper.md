@@ -9,13 +9,13 @@ tags:
 authors:
  - name: Thomas Cokelaer
    orcid: 0000-0001-6286-1138
-   affiliation: 1,2
+   affiliation: "1,2"
  - name: Etienne Kornobis
-   affiliation: 1,2
+   affiliation: "1,2"
 affiliations:
- - name: Institut Pasteur - Bioinformatics and Biostatistics Hub - C3BI, USR 3756 IP CNRS - Paris, France
+ - name: "Institut Pasteur - Bioinformatics and Biostatistics Hub - C3BI, USR 3756 IP CNRS - Paris, France"
    index: 1
- - name: Institut Pasteur - Biomics Pole - Paris, France
+ - name: "Institut Pasteur - Biomics Pole - Paris, France"
    index: 2
 date: 2 August 2020
 bibliography: paper.bib
