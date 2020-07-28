@@ -60,6 +60,8 @@ You will get expected images such as the following one:
 
 .. image:: https://github.com/sequana/sequana_fastqc/blob/master/doc/summary.png?raw=true
 
+More examples and test cases can be found in the Wiki pages: https://github.com/sequana/sequana_fastqc/wiki
+
 Requirements
 ~~~~~~~~~~~~
 
