@@ -111,6 +111,15 @@ reproducibility: sequana is on bioconda, the pipelines are on pypi with
 release version. The third-party tools are on bioconda (fastqc) and within a
 singularity (fastqc and bcl2fastq).
 
+Info general fastqc and demultiplexing:
+
+
+[Interpreation fastqc/multiqc](biomics.pasteur.fr/drylab/of_demultiplexing_and_fastqc.html)
+[demultiplexing](biomics.pasteur.fr/drylab/demultiplexing.html)
+[sample sheet](biomics.pasteur.fr/drylab/samplesheet.html)
+
+
+
 # Acknowledgments
 
 We acknowledge contributions from ....
