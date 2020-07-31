@@ -5,7 +5,7 @@ This is is the **fastqc** pipeline from the `Sequana <https://sequana.readthedoc
 :Output: an HTML file summary.html (individual fastqc report)
 :Status: production
 :Wiki: https://github.com/sequana/sequana_fastqc/wiki
-:Documentation: This README file, the Wiki from the github repository (link above) and sequana.readthedocs.io
+:Documentation: This README file, the Wiki from the github repository (link above) and https://sequana.readthedocs.io
 :Citation: Cokelaer et al, (2017), 'Sequana': a Set of Snakemake NGS pipelines, Journal of Open Source Software, 2(16), 352, JOSS DOI https://doi:10.21105/joss.00352
 
 
