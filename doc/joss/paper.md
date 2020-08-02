@@ -28,7 +28,15 @@ bibliography: paper.bib
 
 # Summary
 
-The field of genomics has reached a mature stage where complete human sequencing can now be performed routinely. Recent pendemic of the SARS-covid virus has shown the power of sequencing to study the evolution of a virus on a world wide scale taking into account mutation of a virus as it spread the world. The sequencing techonologies used througout the world currently span short and long read technologies. The first one is mostly based on the Illumina Sequencers while the second are based on Pacbio and Nanopore technologies. Irrespective of the technology used, the data useful for subsequent analysis is in the form of FastQ files. Surprinsingly, those files are simply text-files storing the sequences that have been generated together with their quality at each position. The simplicity of such format led to a plethora or more or less complex analysis tools used in the field of bioinformatics.
+The field of genomics has reached a mature stage where complete human sequencing
+can be performed routinely, hundred of bacterial strains can be studied
+comparitively, etc. The recent pendemic of the SARS-covid virus has shown
+highlighted the power of sequencing. In a few months, thousands of genomes have
+been sequenced and evolution of the virus could be studied as it spred the
+world. This is achievable thanks to major advances in sequencing technologies in
+the last few decades but also the emergence of bioinformatics tools and
+pipelines that are more and more accessible and open to the scientific
+community. Sequencing technologies currently span short and long-read technologies. The first one is mostly based on the Illumina Sequencers while the second are based on Pacbio and Nanopore technologies. Irrespective of the technology used, the data useful for subsequent analysis is in the form of FastQ files. Surprinsingly, those files are text-files storing the sequences that have been generated together with their quality at each position. The simplicity of such format led to a plethora or more or less complex analysis tools used in the field of bioinformatics.
 
 The short-read technology is currently led by Illumina; amongst the sequencers a few of them (e.g. NextSeq) do not provide the FastQ automatically. Instead, raw data are provided. Before undergoing any analysis, a so-called base-calling is required. This is achieve by a tool provided by Illumina, which is called blc2fastq [@bcl2fastq], wwhich will be discussed hereafter.  Once this tool has generated the FastQ (automatically or not), the first check performed by eihter experimentalist or analysists is to check the quality of the data. 
 
