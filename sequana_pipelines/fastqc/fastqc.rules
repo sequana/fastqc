@@ -87,7 +87,6 @@ rule plotting_and_stats:
             if len(filenames) != 0:
                 f.read_sample(filenames[0], sample)
                 summary.data[sample] = f.fastqc_data[sample]['basic_statistics']
-                print(f.fastqc_data[sample]['basic_statistics'])
             else:
                 summary.data[sample] = {
                     'Filename': 'No fastqc found', 
