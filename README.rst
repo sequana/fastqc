@@ -72,6 +72,12 @@ This pipelines requires the following executable(s):
 
 - fastqc
 
+For Linux users, we provide a singularity image available through damona::
+
+    pip install damona
+    damona install fastqc
+    # and add the ~/.config/damona/bin path to your binary PATH 
+
 .. image:: https://raw.githubusercontent.com/sequana/sequana_fastqc/master/sequana_pipelines/fastqc/dag.png
 
 
