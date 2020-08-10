@@ -2,7 +2,7 @@ This is is the **fastqc** pipeline from the `Sequana <https://sequana.readthedoc
 
 :Overview: Runs fastqc and multiqc on a set of Sequencing data to produce control quality reports
 :Input: A set of FastQ files (paired or single-end) compressed or not
-:Output: an HTML file summary.html (individual fastqc report)
+:Output: an HTML file summary.html (individual fastqc reports, mutli-samples report)
 :Status: production
 :Wiki: https://github.com/sequana/sequana_fastqc/wiki
 :Documentation: This README file, the Wiki from the github repository (link above) and https://sequana.readthedocs.io
@@ -12,13 +12,13 @@ This is is the **fastqc** pipeline from the `Sequana <https://sequana.readthedoc
 Installation
 ~~~~~~~~~~~~
 
-You must install Sequana first::
+You must install Sequana first (use --upgrade to get the latest version installed)::
 
-    pip install sequana
+    pip install sequana --upgrade
 
 Then, just install this package::
 
-    pip install sequana_fastqc
+    pip install sequana_fastqc --upgrade
 
 Usage
 ~~~~~
@@ -39,6 +39,7 @@ This launch a snakemake pipeline. If you are familiar with snakemake, you can re
 
 Or use `sequanix <https://sequana.readthedocs.io/en/master/sequanix.html>`_ interface.
 
+Please see the `Wiki <https://github.com/sequana/sequana_fastqc/wiki>`_ for more examples and features.
 
 Tutorial
 ~~~~~~~~
@@ -62,7 +63,7 @@ You will get expected images such as the following one:
 
 .. image:: https://github.com/sequana/sequana_fastqc/blob/master/doc/summary.png?raw=true
 
-More examples and test cases can be found in the Wiki pages: https://github.com/sequana/sequana_fastqc/wiki
+Please see the `Wiki <https://github.com/sequana/sequana_fastqc/wiki>`_ for more examples and features.
 
 Requirements
 ~~~~~~~~~~~~
