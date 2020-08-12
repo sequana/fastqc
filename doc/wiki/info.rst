@@ -1,7 +1,7 @@
 info
 ====
 
-This is just a list of the files used in the wikie with the type of sequencers and flowcell for book-keeping.
+This is just a list of the files used in the wiki with the type of sequencers and flowcell for book-keeping.
 
 
 
@@ -9,6 +9,6 @@ This is just a list of the files used in the wikie with the type of sequencers a
 ====================================================   ====================================================    ====================================================
 image                                                                       sequencers                                                 runID           
 ====================================================   ====================================================    ====================================================
-genomic_per_sequence_gc_content.png                                          MiSeq                                     B1161_190214_M05218_0117_000000000-C5FCV   
+B1161_genomic_per_sequence_gc_content.png                                      MiSeq                                     190214_M05218_0117_000000000-C5FCV   
 ====================================================   ====================================================    ====================================================
 
