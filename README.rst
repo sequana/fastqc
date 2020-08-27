@@ -1,3 +1,12 @@
+
+.. image:: https://badge.fury.io/py/sequana-fqstqc.svg
+     :target: https://pypi.python.org/pypi/sequana_fastqc
+
+.. image:: http://joss.theoj.org/papers/10.21105/joss.00352/status.svg
+    :target: http://joss.theoj.org/papers/10.21105/joss.00352
+    :alt: JOSS (journal of open source software) DOI
+
+
 This is is the **fastqc** pipeline from the `Sequana <https://sequana.readthedocs.org>`_ projet
 
 :Overview: Runs fastqc and multiqc on a set of Sequencing data to produce control quality reports
