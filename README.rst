@@ -99,6 +99,9 @@ Changelog
 ========= ====================================================================
 Version   Description
 ========= ====================================================================
+1.0.1     * add md5sum of input files as md5.txt file
+1.0.0     * a stable version. Added a wiki on github as well and a 
+            singularity recipes
 0.9.15    * For the HTML reports, takes into account samples with zero reads
 0.9.14    * round up some statistics in the main table 
 0.9.13    * improve the summary HTML report

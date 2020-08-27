@@ -21,7 +21,7 @@ manager.setup(globals(), mode="error")
 
 
 rule pipeline:
-    input: "multiqc/multiqc_report.html", ".sequana/rulegraph.svg", "summary.png"
+    input: "multiqc/multiqc_report.html", ".sequana/rulegraph.svg", "summary.png", 'md5.txt'
 
 
 # FASTQC on input data set
@@ -31,7 +31,25 @@ __fastqc_samples__wkdir       = "samples/{sample}" # manager.getwkdir("fastqc_sa
 __fastqc_samples__log = "samples/%s/fastqc.log" % manager.sample
 include: fastqc_dynamic("samples", manager)
 
+gzfiles = []
+for k,v in manager.samples.items():
+    for this in v:
+        gzfiles.append(this)
 
+rule md5sum:
+    input: sorted(gzfiles)
+    output: "md5.txt"
+    run:
+        from easydev import TempFile
+        temp = TempFile()
+        shell("md5sum {input} > "+ temp.name)
+        with open(temp.name, "r") as fin:
+            with open("md5.txt", "w") as fout:
+                for line in fin.readlines():
+                    x, y = line.split()
+                    y = y.split("/")[-1]
+                    fout.write("{}   {}\n".format(x, y))
+        temp.delete()
 
 comments = """<p><b>Number of samples:</b> {}    <br><b>Paired data:</b> {}<br><b>Browse files here:</b>
 <a href="../tree.html">tree</a>        """.format(
@@ -65,6 +83,7 @@ __rulegraph__output = ".sequana/rulegraph.svg"
 __rulegraph__mapper = {"multiqc2":"multiqc/multiqc_report.html"}
 include: sm.modules['rulegraph']
 localrules: rulegraph
+
 
 
 rule plotting_and_stats:
@@ -110,7 +129,6 @@ localrules: multiqc2, rulegraph
 
 
 onsuccess:
-    #shell("ln -f -s {} index.html".format(__multiqc2__output))
     shell("rm -f ./samples/*/*.done")
     shell("rm -f ./samples/*/*.log")
     shell("chmod -R g+w .")
@@ -174,10 +192,13 @@ onsuccess:
 
 
     from sequana.modules_report.summary import SummaryModule2
+    from sequana_pipelines import fastqc
     data = {
             "name": manager.name,
             "rulegraph": __rulegraph__output,
-            "stats": "stats.txt"
+            "stats": "stats.txt",
+            "pipeline_version": fastqc.version
+
          }
 
 
@@ -192,8 +213,9 @@ onsuccess:
 
     # the main table
     contents += """<div style="clear:both"></div>"""
+    contents += """<hr>Please look at the <b><a href="multiqc/multiqc_report.html">multiqc report</a></b> for more details about your run.<br>"""
+    contents += """A file with <a href="md5.txt">md5sum</a> is also available"""
     contents += "<br><hr><div>Here is a summary for all the samples. The CSV button allows you to export the basic statistics.  {}</div>".format(js + htmltable)
-    contents += """<hr>Please look at the <b><a href="multiqc/multiqc_report.html">multiqc report</a></b> for more details about your run."""
 
     contents += """<h2> Individual fastqc HTML reports for each sample</h2>"""
     contents += hh.get_html()
