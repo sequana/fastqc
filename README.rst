@@ -1,5 +1,5 @@
 
-.. image:: https://badge.fury.io/py/sequana-fqstqc.svg
+.. image:: https://badge.fury.io/py/sequana-fastqc.svg
      :target: https://pypi.python.org/pypi/sequana_fastqc
 
 .. image:: http://joss.theoj.org/papers/10.21105/joss.00352/status.svg
