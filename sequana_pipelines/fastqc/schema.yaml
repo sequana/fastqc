@@ -6,9 +6,6 @@ mapping:
     "input_directory":
         type: str
         required: False
-    "input_readtag":
-        type: str
-        required: False
     "input_pattern":
         type: str
         required: False
@@ -27,7 +24,24 @@ mapping:
     "multiqc":
         type: map
         mapping:
-            "options": 
+            "options":
                 type: str
-            "indir": 
+            "indir":
                 type: str
+    "general":
+        type: map
+        mapping:
+            "method":
+                type: str
+                enum: ['falco', 'fastqc']
+    "falco":
+        type: map
+        mapping:
+            "do_group":
+                type: bool
+            "options":
+                type: str
+                required: False
+            "threads":
+                type: int
+                required: True

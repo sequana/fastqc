@@ -11,7 +11,8 @@ From: cokelaer/damona/sequana:0.9.1
     export PATH=$PATH:/usr/local/anaconda/bin
 
     conda install fastqc==0.11.9
-    pip install sequana_fastqc==1.0.0 --no-deps
+    conda install falco
+    pip install sequana_fastqc==1.1.0 --no-deps
     pip install sequana_pipetools  --no-deps
     conda clean --packages -y
     conda clean --all -y # next requires lots of space

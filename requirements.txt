@@ -1,3 +1,3 @@
-sequana>=0.9.1
-sequana_pipetools>=0.3.1
+sequana>=0.9.5
+sequana_pipetools>=0.4.0
 easydev

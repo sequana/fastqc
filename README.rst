@@ -32,7 +32,16 @@ Then, just install this package::
 Usage
 ~~~~~
 
-::
+This command will scan all files ending in .fastq.gz found in the local
+directory, create a directory called fastqc/ where a snakemake pipeline is
+launched automatically. Depending on the number of files and their sizes, the
+process may be long::
+
+    sequana_fastqc --run
+
+To know more about the options (e.g., add a different pattern to restrict the
+execution to a subset of the input files, change the output/working directory,
+etc)::
 
     sequana_pipelines_fastqc --help
     sequana_pipelines_fastqc --input-directory DATAPATH
@@ -80,6 +89,8 @@ Requirements
 This pipelines requires the following executable(s):
 
 - fastqc
+- falco (optional)
+- sequana (Python: pip install sequana)
 
 For Linux users, we provide a singularity image available through damona::
 
@@ -108,6 +119,12 @@ Changelog
 ========= ====================================================================
 Version   Description
 ========= ====================================================================
+1.1.0     * add new rule to allow users to choose falco software instead of
+            fastqc. Note that fastqc is 4 times faster but still a work in
+            progress (version 0.1 as of Nov 2020).
+          * allows the pipeline to process pacbio files (in fact any files
+            accepted by fastqc i.e. SAM and BAM files
+          * More doc, test and info on the wiki
 1.0.1     * add md5sum of input files as md5.txt file
 1.0.0     * a stable version. Added a wiki on github as well and a 
             singularity recipes

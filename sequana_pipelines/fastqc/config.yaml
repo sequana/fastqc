@@ -8,10 +8,15 @@
 # ============================================================================
 
 
-input_directory: '{}'
-input_readtag: _R[12]_
-input_pattern: '*fastq.gz'
+input_directory: '.'
+input_pattern: '*bam'
 
+
+##############################################################################
+# general section
+##############################################################################
+general:
+    method: fastqc
 
 ##############################################################################
 # FastQC section
@@ -24,6 +29,10 @@ fastqc:
     options: ''
     threads: 4
 
+falco:
+    do_group: true
+    options: ''
+    threads: 4
 
 ##############################################################################
 #
@@ -33,6 +42,6 @@ fastqc:
 #   By default, -p (create pictures) and -f (for overwritting) are used. 
 # - indir: The input multiqc (default is local).
 multiqc:
-    options: '-p -f '
-    indir: "."
+    options: -p -f
+    indir: .
 
