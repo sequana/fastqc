@@ -13,7 +13,7 @@ This is is the **fastqc** pipeline from the `Sequana <https://sequana.readthedoc
 :Input: A set of FastQ files (paired or single-end) compressed or not
 :Output: an HTML file summary.html (individual fastqc reports, mutli-samples report)
 :Status: production
-:Wiki: https://github.com/sequana/sequana_fastqc/wiki
+:Wiki: https://github.com/sequana/fastqc/wiki
 :Documentation: This README file, the Wiki from the github repository (link above) and https://sequana.readthedocs.io
 :Citation: Cokelaer et al, (2017), 'Sequana': a Set of Snakemake NGS pipelines, Journal of Open Source Software, 2(16), 352, JOSS DOI https://doi:10.21105/joss.00352
 
@@ -57,15 +57,15 @@ This launch a snakemake pipeline. If you are familiar with snakemake, you can re
 
 Or use `sequanix <https://sequana.readthedocs.io/en/master/sequanix.html>`_ interface.
 
-Please see the `Wiki <https://github.com/sequana/sequana_fastqc/wiki>`_ for more examples and features.
+Please see the `Wiki <https://github.com/sequana/fastqc/wiki>`_ for more examples and features.
 
 Tutorial
 ~~~~~~~~
 
-You can retrieve test data from sequana_fastqc (https://github.com/sequana/sequana_fastqc) or type::
+You can retrieve test data from sequana_fastqc (https://github.com/sequana/fastqc) or type::
 
-    wget https://raw.githubusercontent.com/sequana/sequana_fastqc/master/sequana_pipelines/fastqc/data/data_R1_001.fastq.gz
-    wget https://raw.githubusercontent.com/sequana/sequana_fastqc/master/sequana_pipelines/fastqc/data/data_R2_001.fastq.gz
+    wget https://raw.githubusercontent.com/sequana/fastqc/master/sequana_pipelines/fastqc/data/data_R1_001.fastq.gz
+    wget https://raw.githubusercontent.com/sequana/fastqc/master/sequana_pipelines/fastqc/data/data_R2_001.fastq.gz
 
 then, prepare the pipeline::
 
@@ -79,9 +79,9 @@ then, prepare the pipeline::
 Just open the HTML entry called summary.html. A multiqc report is also available. 
 You will get expected images such as the following one:
 
-.. image:: https://github.com/sequana/sequana_fastqc/blob/master/doc/summary.png?raw=true
+.. image:: https://github.com/sequana/fastqc/blob/master/doc/summary.png?raw=true
 
-Please see the `Wiki <https://github.com/sequana/sequana_fastqc/wiki>`_ for more examples and features.
+Please see the `Wiki <https://github.com/sequana/fastqc/wiki>`_ for more examples and features.
 
 Requirements
 ~~~~~~~~~~~~
@@ -98,7 +98,7 @@ For Linux users, we provide a singularity image available through damona::
     damona install fastqc
     # and add the ~/.config/damona/bin path to your binary PATH 
 
-.. image:: https://raw.githubusercontent.com/sequana/sequana_fastqc/master/sequana_pipelines/fastqc/dag.png
+.. image:: https://raw.githubusercontent.com/sequana/fastqc/master/sequana_pipelines/fastqc/dag.png
 
 
 Details
@@ -111,7 +111,7 @@ and then execute multiqc. A brief sequana summary report is also produced.
 Rules and configuration details
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Here is the `latest documented configuration file <https://raw.githubusercontent.com/sequana/sequana_fastqc/master/sequana_pipelines/fastqc/config.yaml>`_
+Here is the `latest documented configuration file <https://raw.githubusercontent.com/sequana/fastqc/master/sequana_pipelines/fastqc/config.yaml>`_
 to be used with the pipeline. Each rule used in the pipeline may have a section in the configuration file. 
 
 Changelog
