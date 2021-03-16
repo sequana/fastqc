@@ -31,7 +31,7 @@ mapping:
     "general":
         type: map
         mapping:
-            "method":
+            "method_choice":
                 type: str
                 enum: ['falco', 'fastqc']
     "falco":

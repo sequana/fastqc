@@ -23,7 +23,7 @@ def func(filename):
 manager = sm.PipelineManagerGeneric("fastqc", config, sample_func=func)
 manager.setup(globals(), mode="warning")
 
-# we can try to figure out whether input data is paired. 
+# we can try to figure out whether input data is paired.
 PAIRED = False
 # do we have illumina paired data with tag _R1_
 R1 = [1 for x in manager.samples.values() if "_R1_" in x.split("/")[-1]]
@@ -40,7 +40,7 @@ manager.paired = PAIRED
 
 
 # Some sanity checks
-if config['general']['method'] == 'falco':
+if config['general']['method_choice'] == 'falco':
     # make sure input files are not sam/bam files
     if list(manager.samples.values())[0].endswith('.bam') or \
         list(manager.samples.values())[0].endswith('.sam'):
@@ -53,7 +53,7 @@ rule pipeline:
 
 
 __qc_done__ = "samples/{sample}/{sample}.done"
-if 'general' in config and 'method' in config['general'] and config['general']['method'] == 'falco':
+if 'general' in config and 'method_choice' in config['general'] and config['general']['method_choice'] == 'falco':
     METHOD = "falco"
     __falco_samples__input_fastq = manager.getrawdata()
     __falco_samples__output_done = __qc_done__
@@ -188,7 +188,7 @@ onsuccess:
         fout.write(hh.get_html())
 
     from sequana import logger
-    logger.level = "INFO"
+    logger.setLevel("INFO")
 
     # This should create the stats plot and the Makefile
     manager.teardown()
@@ -265,7 +265,7 @@ onsuccess:
     image = SummaryModule2.png_to_embedded_png("dummy", "summary.png", 
                 style="width:80%; height:40%")
 
-    contents += '<div style="float:right; width:65%">The following image shows the overall quality of your input files. <br>{}</div>'.format(image)
+    contents += '<div style="float:right; width:65%">The following image shows the overall quality of your input files. <br><a href="./multiqc/multiqc_report.html">{}</a></div>'.format(image)
 
     # the main table
     contents += """<div style="clear:both"></div>"""
@@ -286,4 +286,8 @@ onsuccess:
     shell("chmod -R g+w .")
 
 onerror:
-    print("An error occurred. See message above.")
+    from sequana_pipetools.errors import PipeError
+    p = PipeError("fastqc")
+    p.status()
+
+

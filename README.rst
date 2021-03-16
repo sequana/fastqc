@@ -107,6 +107,15 @@ Details
 This pipeline runs fastqc in parallel on the input fastq files (paired or not)
 and then execute multiqc. A brief sequana summary report is also produced.
 
+You may use falco instead of fastqc. This is experimental but seem to work for
+Illumina/FastQ files.
+
+This pipeline has been tested on several hundreds of MiSeq, NextSeq, MiniSeq,
+ISeq100, Pacbio runs.
+
+It produces a md5sum of your data. It copes with empty samples. Produces
+ready-to-use HTML reports, etc
+
 
 Rules and configuration details
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -119,6 +128,8 @@ Changelog
 ========= ====================================================================
 Version   Description
 ========= ====================================================================
+1.2.0     * compatibility with Sequanix
+          * Fix pipeline to cope with new snakemake API
 1.1.0     * add new rule to allow users to choose falco software instead of
             fastqc. Note that fastqc is 4 times faster but still a work in
             progress (version 0.1 as of Nov 2020).

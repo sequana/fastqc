@@ -104,7 +104,7 @@ def main(args=None):
         cfg = manager.config.config
         cfg.input_pattern = options.input_pattern
         cfg.input_directory = os.path.abspath(options.input_directory)
-        cfg.general.method = options.method
+        cfg.general.method_choice = options.method
 
         manager.exists(cfg.input_directory)
 
