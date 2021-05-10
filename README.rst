@@ -128,6 +128,10 @@ Changelog
 ========= ====================================================================
 Version   Description
 ========= ====================================================================
+1.3.0     * add option --skip-multiqc (in case of memory trouble)
+          * Fix typo in the link towards fastqc reports in the summary.html
+            table
+          * Fix number of samples in the paired case (divide by 2)
 1.2.0     * compatibility with Sequanix
           * Fix pipeline to cope with new snakemake API
 1.1.0     * add new rule to allow users to choose falco software instead of

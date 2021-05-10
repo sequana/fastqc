@@ -9,7 +9,7 @@
 
 
 input_directory: '.'
-input_pattern: '*bam'
+input_pattern: '*fastq.gz'
 
 
 ##############################################################################
@@ -43,6 +43,7 @@ falco:
 #   By default, -p (create pictures) and -f (for overwritting) are used. 
 # - indir: The input multiqc (default is local).
 multiqc:
+    do: true
     options: -p -f
     indir: .
 

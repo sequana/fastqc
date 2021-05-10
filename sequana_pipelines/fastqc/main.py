@@ -56,6 +56,9 @@ class Options(argparse.ArgumentParser):
             help="""Software to be used to perform QC of input data set,
                 Standard tool is fastqc (default), but one can use falco, which is 3-4 faster
                 and produces same plots""")
+        pipeline_group.add_argument("--skip-multiqc", default=False, action="store_true",
+            help="""It may happen that multiqc requires lots of memory. For local
+run, you may want to swithc multiqc off with this option""")
         #pipeline_group.add_argument("--data-type", dest="data_type",
         #    default="illumina", choices=['illumina', 'nanopore', 'pacbio', 'mgi', 'others'], 
         #    help="""nanopore, others and pacbio are not paired. The --input-readtag then be ignored""")
@@ -104,7 +107,7 @@ def main(args=None):
         cfg = manager.config.config
         cfg.input_pattern = options.input_pattern
         cfg.input_directory = os.path.abspath(options.input_directory)
-        cfg.general.method_choice = options.method
+        cfg.multiqc.do = not options.skip_multiqc
 
         manager.exists(cfg.input_directory)
 
