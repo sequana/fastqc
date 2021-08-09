@@ -1,30 +1,42 @@
-"""Multi fastqc pipeline
-
-Author: Thomas Cokelaer
-Affiliation: Institut Pasteur @ 2019-2020
-
-This pipeline is part of Sequana software (sequana.readthedocs.io)
-
-"""
-import sequana
-from sequana import snaketools as sm
+#
+#  This file is part of Sequana software
+#
+#  Copyright (c) 2016-2021 - Sequana Dev Team (https://sequana.readthedocs.io)
+#
+#  Distributed under the terms of the 3-clause BSD license.
+#  The full license is in the LICENSE file, distributed with this software.
+#
+#  Website:       https://github.com/sequana/sequana
+#  Website:       https://github.com/sequana/fastqc
+#  Documentation: http://sequana.readthedocs.io
+#  Documentation: https://github.com/sequana/fastqc/README.rst
+##############################################################################
+"""Multi FastQC pipeline"""
 import sys
+import json
+
+import pandas as pd
+
+from sequana.utils.datatables_js import DataTable
+from sequana.utils.tree import HTMLDirectory
+
+from sequana_pipetools import PipelineManagerGeneric
+from sequana_pipetools import snaketools as sm
 
 # This must be defined before the include
 configfile: "config.yaml"
 
-# Generic include of some dynamic modules
-exec(open(sequana.modules["fastqc_dynamic"], "r").read())
-exec(open(sequana.modules["falco_dynamic"], "r").read())
-
-# A convenient manager to figure out whether data is paired or not
+# A convenient manager
 def func(filename):
     return filename.split("/")[-1].split('.', 1)[0]
-manager = sm.PipelineManagerGeneric("fastqc", config, sample_func=func)
+manager = PipelineManagerGeneric("fastqc", config, sample_func=func)
 manager.setup(globals(), mode="warning")
 
+# the manager can figure out whether data is paired or not but with input
+# sam/bam it is not for sure, so we need some additional simple code here:
 # we can try to figure out whether input data is paired.
 PAIRED = False
+
 # do we have illumina paired data with tag _R1_
 R1 = [1 for x in manager.samples.values() if "_R1_" in x.split("/")[-1]]
 R2 = [1 for x in manager.samples.values() if "_R2_" in x.split("/")[-1]]
@@ -48,8 +60,7 @@ if config['general']['method_choice'] == 'falco':
             sys.exit(1)
 
 
-# multiqc is optional
-expected_output = [".sequana/rulegraph.svg", "summary.png", 'md5.txt']
+expected_output = [".sequana/rulegraph.svg", "outputs/summary.png", 'md5.txt']
 if config['multiqc']['do']:
     expected_output += ["multiqc/multiqc_report.html"]
 
@@ -59,24 +70,42 @@ rule pipeline:
 
 
 
-__qc_done__ = "samples/{sample}/{sample}.done"
-if 'general' in config and 'method_choice' in config['general'] and config['general']['method_choice'] == 'falco':
+if 'general' in config and 'method_choice' in config['general'] and \
+    config['general']['method_choice'] == 'falco':
+
     METHOD = "falco"
-    __falco_samples__input_fastq = manager.getrawdata()
-    __falco_samples__output_done = __qc_done__
-    __falco_samples__wkdir       = "samples/{sample}" # manager.getwkdir("falco_samples")
-    __falco_samples__log = "samples/%s/falco.log" % manager.sample
-    include: falco_dynamic("samples", manager)
+    __qc_done__ = expand("samples/{sample}/summary.txt", sample=manager.samples)
+    rule falco:
+        input: manager.getrawdata()
+        output: "samples/{sample}/summary.txt"
+        log:
+            "samples/{sample}/falco.log"
+        threads:
+            config['falco']['threads']
+        params:
+            options=config['falco']['options'],
+            working_directory="samples/{sample}"
+        wrapper:
+            "main/wrappers/falco"
+
 else:
     METHOD = "fastqc"
-    # FASTQC on input data set
-    __fastqc_samples__input_fastq = manager.getrawdata()
-    __fastqc_samples__output_done = __qc_done__
-    __fastqc_samples__wkdir       = "samples/{sample}" # manager.getwkdir("fastqc_samples")
-    __fastqc_samples__log = "samples/%s/fastqc.log" % manager.sample
-    include: fastqc_dynamic("samples", manager)
+    __qc_done__ = expand("samples/{sample}/fastqc.done", sample=manager.samples)
+    rule fastqc:
+        input: manager.getrawdata()
+        output: "samples/{sample}/fastqc.done"
+        log:
+            "samples/{sample}/fastqc.log"
+        threads:
+            config['fastqc']['threads']
+        params:
+            options=config['fastqc']['options'],
+            working_directory="samples/{sample}"
+        wrapper:
+            "main/wrappers/fastqc"
 
 
+# define a list of files for the md5sum
 allfiles = []
 for k,v in manager.samples.items():
     if isinstance(v, str):
@@ -85,66 +114,87 @@ for k,v in manager.samples.items():
         for this in v:
             allfiles.append(this)
 
+
 rule md5sum:
     input: sorted(allfiles)
     output: "md5.txt"
     run:
-        from easydev import TempFile
-        temp = TempFile()
-        shell("md5sum {input} > "+ temp.name)
-        with open(temp.name, "r") as fin:
-            with open("md5.txt", "w") as fout:
-                for line in fin.readlines():
-                    x, y = line.split()
-                    y = y.split("/")[-1]
-                    fout.write("{}   {}\n".format(x, y))
-        temp.delete()
+        import tempfile
+        with tempfile.NamedTemporaryFile() as temp:
+            shell("md5sum {input} > "+ temp.name)
+            temp.flush()
+            with open(temp.name, "r") as fin:
+                with open("md5.txt", "w") as fout:
+                    for line in fin.readlines():
+                        x, y = line.split()
+                        y = y.split("/")[-1]
+                        fout.write("{}   {}\n".format(x, y))
 
-comments = """<p><b>Number of samples:</b> {}    <br><b>Paired data:</b> {}<br><b>Browse files here:</b>
-<a href="../tree.html">tree</a>        """.format(
-    len(manager.samples.keys()) , PAIRED)
+N = len(manager.samples.keys())
+comments = f"""<p><b>Number of input files:</b> {N} <br>
+               <b>Paired data:</b> {manager.paired}<br>
+               <b>Browse files here:</b>
+               <a href="../tree.html">tree</a>"""
 
 from sequana_pipelines.fastqc import version as v2
-from sequana import version as v1
-comments += """<br><b><a href="https://sequana.readthedocs.io">Sequana version: </a></b>{}""".format(v1)
-comments += """<br><b><a href="https://github.com/sequana/sequana_fastqc">Sequana_fastqc version: </a></b>{}</p>""".format(v2)
+from sequana_pipetools import version as v1
+from sequana import version as v0
+comments += f"""<br><b><a href="https://sequana.readthedocs.io">Sequana version: </a></b>{v0}"""
+comments += f"""<br><b><a href="https://github.com/sequana/sequana_fastqc">Sequana_fastqc version: </a></b>{v2}"""
+comments += f"""<br><b><a href="https://github.com/sequana/sequana_pipetools">Sequana_pipetools version: </a></b>{v1}</p>"""
 
 
 # Multiqc rule
 if config['multiqc']['do']:
 
-    __multiqc2__input = expand(__qc_done__, sample=manager.samples)
-    __multiqc2__logs = "multiqc/multiqc.log"
-    __multiqc2__output = "multiqc/multiqc_report.html"
-    __multiqc2__indir = config['multiqc']['indir']
-    __multiqc2__outdir = "multiqc"
-    __multiqc2__config = "multiqc_config.yaml"
-
+    if METHOD == "falco":
+        __multiqc__input = expand("samples/{sample}/summary.txt", sample=manager.samples)
+    else:
+        __multiqc__input = expand(__qc_done__, sample=manager.samples)
     # do not specify fastqc itself alone, otherwise it fails (feb 2020)
-    __multiqc2__modules = ""
 
-    config['multiqc']['options'] = "-m fastqc " + config["multiqc"]["options"].replace("-f", " ") + \
-                               " --comment \"{}\" ".format(comments)
-    include: sm.modules["multiqc2"]
+    config['multiqc']['options'] = config["multiqc"]["options"] + f" --comment '{comments}'"
 
 
-__rulegraph__input = manager.snakefile
-__rulegraph__output = ".sequana/rulegraph.svg"
+    __multiqc__output = "multiqc/multiqc_report.html"
+    rule multiqc:
+       input:
+            __multiqc__input
+       output:
+           __multiqc__output
+       params:
+           options=config['multiqc']['options'],
+           input_directory=config['multiqc']['input_directory'],
+           config_file=config['multiqc']['config_file'],
+           modules=config['multiqc']['modules']
+       log:
+           "multiqc/multiqc.log"
+       wrapper:
+           "main/wrappers/multiqc"
+
+
 __rulegraph__mapper = {}
 if config['multiqc']['do']:
-    __rulegraph__mapper["multiqc2"] = "multiqc/multiqc_report.html"
-
-include: sm.modules['rulegraph']
+    __rulegraph__mapper["multiqc"] = f"../{__multiqc__output}"
 
 
+rule rulegraph:
+    input: manager.snakefile
+    output:
+        svg = ".sequana/rulegraph.svg"
+    params:
+        mapper = __rulegraph__mapper,
+        configname = "config.yaml"
+    wrapper:
+        "main/wrappers/rulegraph"
 
-localrules: rulegraph
+
 
 
 
 rule plotting_and_stats:
-    input: expand(__qc_done__, sample=manager.samples)
-    output: "summary.png", "summary.json"
+    input: __qc_done__
+    output: "outputs/summary.png", "outputs/summary.json"
     run:
         import glob
         from sequana.fastqc import FastQC
@@ -180,7 +230,7 @@ rule plotting_and_stats:
         if max_sequences < 1000000 and max_sequences != 0:
             shell('echo "read_count_multiplier: 1" >> multiqc_config.yaml ')
             shell('echo "read_count_prefix: ' '" >> multiqc_config.yaml ')
-        summary.to_json("summary.json")
+        summary.to_json(output[1])
 
         f.plot_sequence_quality()
         from pylab import savefig, gcf
@@ -196,7 +246,6 @@ localrules: rulegraph
 onsuccess:
 
     # Create the tree.html file with all fastqc reports
-    from sequana.utils.tree import HTMLDirectory
     hh = HTMLDirectory(".", pattern="fastqc.html")
     with open("tree.html", "w") as fout:
         fout.write(hh.get_html())
@@ -208,15 +257,12 @@ onsuccess:
     manager.teardown()
 
     if config['multiqc']['do']:
-        manager.clean_multiqc(__multiqc2__output)
+        manager.clean_multiqc(__multiqc__output)
 
     # Now, the main HTML report
-    import pandas as pd
-    from sequana.utils.datatables_js import DataTable
-    import json
 
     # Summary table with links towards fastqc
-    data = json.load(open("summary.json", "r"))
+    data = json.load(open("outputs/summary.json", "r"))
     df = pd.DataFrame(data['data'])
     df = df.T
     df.drop(['File type', "Encoding", "Sequences flagged as poor quality"],
@@ -270,44 +316,46 @@ onsuccess:
     from sequana_pipelines import fastqc
     data = {
             "name": manager.name,
-            "rulegraph": __rulegraph__output,
+            "rulegraph": ".sequana/rulegraph.svg",
             "stats": "stats.txt",
             "pipeline_version": fastqc.version
 
          }
 
-
     # Here the is main HTML page report
-    contents = "<h2> General information</h2>"
-    contents += """<div style="float:left; width:30%">{}</div>""".format(js2 + htmltable2)
+    contents = f"""<h2> General information</h2>
+                  <div style="float:left; width:30%">{js2} {htmltable2}</div>
+               """
 
-    image = SummaryModule2.png_to_embedded_png("dummy", "summary.png", 
+    image = SummaryModule2.png_to_embedded_png("dummy", "outputs/summary.png", 
                 style="width:80%; height:40%")
 
-    contents += '<div style="float:right; width:65%">The following image shows the overall quality of your input files. <br><a href="./multiqc/multiqc_report.html">{}</a></div>'.format(image)
+    contents += f"""<div style="float:right; width:65%">
+         The following image shows the overall quality of your input files. <br>
+         <a href="./multiqc/multiqc_report.html">{image}</a></div>
+        <div style="clear:both"></div>"""
 
-    # the main table
-    contents += """<div style="clear:both"></div>"""
     if config['multiqc']['do']:
-        contents += """<hr>Please look at the <b><a href="multiqc/multiqc_report.html">multiqc report</a></b> for more details about your run.<br>"""
-    contents += """A file with <a href="md5.txt">md5sum</a> is also available for the input file."""
-    contents += "<br><hr><div>Here is a summary for all the samples. The CSV button allows you to export the basic statistics.  {}</div>".format(js + htmltable)
+        contents += """
+            <hr>Please look at the <b>
+            <a href="multiqc/multiqc_report.html">multiqc report</a></b> for more details about your run.<br>"""
 
-    contents += """<h2> Individual fastqc HTML reports for each sample</h2>"""
+
+    contents += f"""A file with <a href="md5.txt">md5sum</a> is also available for the input file.
+                <br><hr><div>Here is a summary for all the samples. The CSV button allows you to 
+                export the basic statistics.  {js} {htmltable}</div>
+                <h2> Individual fastqc HTML reports for each sample</h2>"""
     contents += hh.get_html()
-
 
 
     s = SummaryModule2(data, intro=contents)
 
     # finally, some cleanup
     shell("rm -rf rulegraph")   # embedded in report
-    shell("rm -rf summary.png") # embedded in report
     shell("chmod -R g+w .")
 
 onerror:
     from sequana_pipetools.errors import PipeError
     p = PipeError("fastqc")
     p.status()
-
 

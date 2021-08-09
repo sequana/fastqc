@@ -1,2 +1,4 @@
 fastqc
 falco
+multiqc
+dot

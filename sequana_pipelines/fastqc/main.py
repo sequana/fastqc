@@ -94,7 +94,7 @@ def main(args=None):
     options = Options(NAME, epilog=sequana_epilog).parse_args(args[1:])
 
 
-    from sequana.pipelines_common import SequanaManager
+    from sequana_pipetools import SequanaManager
 
     # the real stuff is here
     manager = SequanaManager(options, NAME)

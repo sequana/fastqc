@@ -26,12 +26,10 @@ general:
 #
 # - options: string with any valid FastQC options
 fastqc:
-    do_group: true
     options: ''
     threads: 4
 
 falco:
-    do_group: true
     options: ''
     threads: 4
 
@@ -45,5 +43,8 @@ falco:
 multiqc:
     do: true
     options: -p -f
-    indir: .
+    input_directory: /home/cokelaer/Data/Hm2/fastqc
+    modules: fastqc    # falco is not set; the fastqc module works for falco
+    config_file: /home/cokelaer/Data/Hm2/fastqc/multiqc_config.yaml
+
 

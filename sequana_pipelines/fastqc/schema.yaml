@@ -1,4 +1,4 @@
-# Schema validator for the quality_control
+# Schema validator for the fastqc config file
 # author: Thomas Cokelaer
 
 type: map
@@ -28,7 +28,11 @@ mapping:
               type: bool
             "options":
                 type: str
-            "indir":
+            "modules":
+                type: str
+            "config_file":
+                type: str
+            "input_directory":
                 type: str
     "general":
         type: map
