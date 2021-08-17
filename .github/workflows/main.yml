@@ -36,7 +36,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install coveralls pytest-cov pytest 
+        pip install coveralls pytest-cov pytest pytest-xdist
 
     - name: install package itself
       run: |
