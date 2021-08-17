@@ -6,6 +6,10 @@
     :target: http://joss.theoj.org/papers/10.21105/joss.00352
     :alt: JOSS (journal of open source software) DOI
 
+.. image:: https://github.com/sequana/sequana-wrappers/actions/workflows/main.yml/badge.svg
+   :target: https://github.com/sequana/sequana-wrappers/actions/workflows    
+
+
 
 This is is the **fastqc** pipeline from the `Sequana <https://sequana.readthedocs.org>`_ projet
 
