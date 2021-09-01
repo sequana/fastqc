@@ -132,6 +132,9 @@ Changelog
 ========= ====================================================================
 Version   Description
 ========= ====================================================================
+1.4.0     * This version uses sequana 0.12.0 and new sequana-wrappers 
+            mechanism. Functionalities is unchanged. Also based on
+            sequana_pipetools 0.6.X
 1.3.0     * add option --skip-multiqc (in case of memory trouble)
           * Fix typo in the link towards fastqc reports in the summary.html
             table

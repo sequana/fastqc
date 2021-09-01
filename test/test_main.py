@@ -36,7 +36,10 @@ def test_full():
         cmd = cmd.format(sharedir, wk)
         subprocess.call(cmd.split())
 
-        stat = subprocess.call("sh fastqc.sh".split(), cwd=wk)
+
+        cmd = "snakemake -s fastqc.rules --wrapper-prefix https://raw.githubusercontent.com/sequana/sequana-wrappers/  -p --cores 2 "
+
+        stat = subprocess.call(cmd.split(), cwd=wk)
 
         assert os.path.exists(wk + "/summary.html")
         assert os.path.exists(wk + "/tree.html")

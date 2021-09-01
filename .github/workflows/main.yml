@@ -53,8 +53,6 @@ jobs:
     - name: testing
       run: |
         pytest -v --cov-report term-missing --cov=sequana_pipelines.fastqc
-      env:
-        SEQUANA_WRAPPERS: https://github.com/sequana/sequana-wrappers
 
     - name: coveralls
       run: |
