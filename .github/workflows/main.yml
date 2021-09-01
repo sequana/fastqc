@@ -40,7 +40,7 @@ jobs:
     - name: conda
       run: |
         conda install -c conda-forge mamba --quiet
-        mamba  -c bioconda -c conda-forge --quiet -y fastqc falco graphviz
+        mamba install -c bioconda -c conda-forge --quiet -y fastqc falco graphviz
 
     - name: Install dependencies
       run: |
