@@ -4,9 +4,9 @@ import tempfile
 import subprocess
 import sys
 
+from . import test_dir
 
-sequana_path = easydev.get_package_location('sequana_fastqc')
-sharedir = os.sep.join([sequana_path , "sequana_pipelines", 'fastqc', 'data'])
+sharedir = f"{test_dir}/data"
 
 
 # 
@@ -29,7 +29,6 @@ def test_standalone_script():
 def test_full():
 
     with tempfile.TemporaryDirectory() as directory:
-        print(directory)
         wk = directory
 
         cmd = "sequana_pipelines_fastqc --input-directory {} "

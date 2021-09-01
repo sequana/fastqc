@@ -43,8 +43,8 @@ falco:
 multiqc:
     do: true
     options: -p -f
-    input_directory: /home/cokelaer/Data/Hm2/fastqc
+    input_directory: "."
     modules: fastqc    # falco is not set; the fastqc module works for falco
-    config_file: /home/cokelaer/Data/Hm2/fastqc/multiqc_config.yaml
+    config_file:
 
 

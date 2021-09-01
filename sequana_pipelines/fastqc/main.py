@@ -20,8 +20,10 @@ import argparse
 import subprocess
 
 from sequana_pipetools.options import *
+from sequana_pipetools.options import before_pipeline
 from sequana_pipetools.misc import Colors
 from sequana_pipetools.info import sequana_epilog, sequana_prolog
+from sequana_pipetools import SequanaManager
 
 col = Colors()
 
@@ -87,14 +89,10 @@ def main(args=None):
         args = sys.argv
 
     # whatever needs to be called by all pipeline before the options parsing
-    from sequana_pipetools.options import before_pipeline
     before_pipeline(NAME)
 
     # option parsing including common epilog
     options = Options(NAME, epilog=sequana_epilog).parse_args(args[1:])
-
-
-    from sequana_pipetools import SequanaManager
 
     # the real stuff is here
     manager = SequanaManager(options, NAME)
@@ -109,8 +107,9 @@ def main(args=None):
         cfg.input_directory = os.path.abspath(options.input_directory)
         cfg.multiqc.do = not options.skip_multiqc
 
-        manager.exists(cfg.input_directory)
+        cfg.general.method_choice = options.method
 
+        manager.exists(cfg.input_directory)
     # finalise the command and save it; copy the snakemake. update the config
     # file and save it.
     # Since input can be bam, fast5, mgi, the standard FastQFactory may not
