@@ -21,7 +21,7 @@ jobs:
 
     - name: install graphviz
       run: |
-        apt-get install -y graphviz
+        sudo apt-get install -y graphviz
 
     - name: checkout git repo
       uses: actions/checkout@v2
