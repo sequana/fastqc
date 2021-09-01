@@ -44,10 +44,11 @@ jobs:
     - name: install package itself
       run: |
          pip install .
+         pip install pygraphviz
 
     - name: testing
       run: |
-        pytest --cov-report term --cov=sequana_pipelines.fastqc
+        pytest -v --cov-report term-missing --cov=sequana_pipelines.fastqc
       env:
         SEQUANA_WRAPPERS: https://github.com/sequana/sequana-wrappers
 
