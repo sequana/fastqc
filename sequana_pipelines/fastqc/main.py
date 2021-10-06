@@ -1,11 +1,7 @@
-# -*- coding: utf-8 -*-
 #
 #  This file is part of Sequana software
 #
-#  Copyright (c) 2016 - Sequana Development Team
-#
-#  File author(s):
-#      Thomas Cokelaer <thomas.cokelaer@pasteur.fr>
+#  Copyright (c) 2016-2021 - Sequana Development Team
 #
 #  Distributed under the terms of the 3-clause BSD license.
 #  The full license is in the LICENSE file, distributed with this software.
@@ -37,6 +33,7 @@ class Options(argparse.ArgumentParser):
             epilog=epilog,
             formatter_class=argparse.ArgumentDefaultsHelpFormatter
         )
+
         # add a new group of options to the parser
         so = SlurmOptions()
         so.add_options(self)
@@ -80,7 +77,6 @@ run, you may want to swithc multiqc off with this option""")
                     action.required = False
         options = super(Options, self).parse_args(*args)
         return options
-
 
 
 def main(args=None):

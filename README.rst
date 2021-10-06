@@ -110,7 +110,7 @@ Details
 
 This pipeline runs fastqc in parallel on the input fastq files (paired or not)
 and then execute multiqc. A brief sequana summary report is also produced.
-
+s
 You may use falco instead of fastqc. This is experimental but seem to work for
 Illumina/FastQ files.
 
@@ -132,6 +132,7 @@ Changelog
 ========= ====================================================================
 Version   Description
 ========= ====================================================================
+1.4.1     * simplified pipeline with wrappers/rules
 1.4.0     * This version uses sequana 0.12.0 and new sequana-wrappers 
             mechanism. Functionalities is unchanged. Also based on
             sequana_pipetools 0.6.X
