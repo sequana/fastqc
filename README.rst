@@ -132,6 +132,7 @@ Changelog
 ========= ====================================================================
 Version   Description
 ========= ====================================================================
+1.4.2     * simplified pipeline with wrappers/rules
 1.4.1     * simplified pipeline with wrappers/rules
 1.4.0     * This version uses sequana 0.12.0 and new sequana-wrappers 
             mechanism. Functionalities is unchanged. Also based on

@@ -30,7 +30,7 @@ def func(filename):
     return filename.split("/")[-1].split('.', 1)[0]
 
 manager = PipelineManagerGeneric("fastqc", config, sample_func=func)
-manager.setup(globals(), mode="warning")
+manager.setup(globals(),mode="warning")
 
 # the manager can figure out whether data is paired or not but with input
 # sam/bam it is not for sure, so we need some additional simple code here:
@@ -157,20 +157,11 @@ if config['multiqc']['do']:
            "main/wrappers/multiqc"
 
 
-__rulegraph__mapper = {}
+# ====================================================================== rulegraph 
+sequana_rulegraph_mapper = {}
 if config['multiqc']['do']:
-    __rulegraph__mapper["multiqc"] = f"../{__multiqc__output}"
-
-
-rule rulegraph:
-    input: str(manager.snakefile)
-    output:
-        svg = ".sequana/rulegraph.svg"
-    params:
-        mapper = __rulegraph__mapper,
-        configname = "config.yaml"
-    wrapper:
-        "main/wrappers/rulegraph"
+    sequana_rulegraph_mapper["multiqc"] = f"../{__multiqc__output}"
+include: sm.modules['rulegraph']
 
 
 
