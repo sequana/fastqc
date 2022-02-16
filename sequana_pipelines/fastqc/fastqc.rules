@@ -30,7 +30,6 @@ def func(filename):
     return filename.split("/")[-1].split('.', 1)[0]
 
 manager = PipelineManagerGeneric("fastqc", config, sample_func=func)
-manager.setup(globals(),mode="warning")
 
 # the manager can figure out whether data is paired or not but with input
 # sam/bam it is not for sure, so we need some additional simple code here:
