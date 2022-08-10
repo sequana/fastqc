@@ -20,6 +20,9 @@ mapping:
             "threads":
                 type: int
                 required: True
+            "resources":
+                type: any
+                required: true
 
     "multiqc":
         type: map
@@ -34,6 +37,9 @@ mapping:
                 type: str
             "input_directory":
                 type: str
+            "resources":
+                type: any
+                required: true
     "general":
         type: map
         mapping:
@@ -51,3 +57,13 @@ mapping:
             "threads":
                 type: int
                 required: True
+            "resources":
+                type: any
+                required: true
+
+    "plotting_and_stats":
+        type: map
+        mapping:
+            "resources":
+                type: any
+                required: true

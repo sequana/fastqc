@@ -12,7 +12,7 @@ sharedir = f"{test_dir}/data"
 # 
 def test_standalone_subprocess():
     directory = tempfile.TemporaryDirectory()
-    cmd = "sequana_pipelines_fastqc --input-directory {} "
+    cmd = "sequana_fastqc --input-directory {} "
     cmd += "--working-directory {} --run-mode local --force"
     cmd = cmd.format(sharedir, directory.name)
     subprocess.call(cmd.split())
@@ -31,7 +31,7 @@ def test_full():
     with tempfile.TemporaryDirectory() as directory:
         wk = directory
 
-        cmd = "sequana_pipelines_fastqc --input-directory {} "
+        cmd = "sequana_fastqc --input-directory {} "
         cmd += "--working-directory {} --run-mode local --force"
         cmd = cmd.format(sharedir, wk)
         subprocess.call(cmd.split())
@@ -46,5 +46,5 @@ def test_full():
         assert os.path.exists(wk + "/multiqc/multiqc_report.html")
 
 def test_version():
-    cmd = "sequana_pipelines_fastqc --version"
+    cmd = "sequana_fastqc --version"
     subprocess.call(cmd.split())
