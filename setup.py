@@ -6,8 +6,8 @@ from setuptools.command.install import install
 import subprocess
 
 _MAJOR               = 1
-_MINOR               = 4
-_MICRO               = 2
+_MINOR               = 5
+_MICRO               = 0
 version              = '%d.%d.%d' % (_MAJOR, _MINOR, _MICRO)
 release              = '%d.%d' % (_MAJOR, _MINOR)
 
@@ -68,22 +68,19 @@ setup(
     classifiers      = metainfo['classifiers'],
 
     # package installation
-    packages = ["sequana_pipelines.fastqc",
-        'sequana_pipelines.fastqc.data' ],
+    packages = ["sequana_pipelines.fastqc"],
 
     install_requires = open("requirements.txt").read(),
 
     # This is recursive include of data files
     exclude_package_data = {"": ["__pycache__"]},
     package_data = {
-        '': ['*.yaml', "*.rules", "*.json", "requirements.txt", "*png"],
-        'sequana_pipelines.fastqc.data' : ['*.*'], 
+        '': ['*.yaml', "*.rules", "*.json", "requirements.txt", "*png", "*yml", "*smk"]
         },
 
     zip_safe=False,
 
     entry_points = {'console_scripts':[
-        'sequana_pipelines_fastqc=sequana_pipelines.fastqc.main:main',
         'sequana_fastqc=sequana_pipelines.fastqc.main:main']
     }
 
