@@ -25,13 +25,11 @@ This is is the **fastqc** pipeline from the `Sequana <https://sequana.readthedoc
 Installation
 ~~~~~~~~~~~~
 
-You must install Sequana first (use --upgrade to get the latest version installed)::
-
-    pip install sequana --upgrade
-
-Then, just install this package::
+sequana_fastqc is based on Python3, just install the package as follows::
 
     pip install sequana_fastqc --upgrade
+
+You will need third-party software such as fastqc. Please see below for details.
 
 Usage
 ~~~~~
@@ -47,10 +45,10 @@ To know more about the options (e.g., add a different pattern to restrict the
 execution to a subset of the input files, change the output/working directory,
 etc)::
 
-    sequana_pipelines_fastqc --help
-    sequana_pipelines_fastqc --input-directory DATAPATH
+    sequana_fastqc --help
+    sequana_fastqc --input-directory DATAPATH
 
-This creates a directory **fastq**. You just need to execute the pipeline::
+This creates a directory **fastqc**. You just need to execute the pipeline::
 
     cd fastqc
     sh fastqc.sh  # for a local run
@@ -83,7 +81,7 @@ then, prepare the pipeline::
 Just open the HTML entry called summary.html. A multiqc report is also available. 
 You will get expected images such as the following one:
 
-.. image:: https://github.com/sequana/fastqc/blob/master/doc/summary.png?raw=true
+.. image:: https://github.com/sequana/fastqc/blob/main/doc/summary.png?raw=true
 
 Please see the `Wiki <https://github.com/sequana/fastqc/wiki>`_ for more examples and features.
 
@@ -94,15 +92,17 @@ This pipelines requires the following executable(s):
 
 - fastqc
 - falco (optional)
-- sequana (Python: pip install sequana)
 
-For Linux users, we provide a singularity image available through damona::
 
-    pip install damona
-    damona install fastqc
-    # and add the ~/.config/damona/bin path to your binary PATH 
+For Linux users, we provide singularity images available through within the **damona** project (https://damona.readthedocs.io). 
 
-.. image:: https://raw.githubusercontent.com/sequana/fastqc/master/sequana_pipelines/fastqc/dag.png
+To mak use of them, initiliase the pipeline with the --use-singularity option and everything should be downloaded
+automatically for you, which also guarantees reproducibility::
+
+    sequana_fastqc --input-directory data --use-singularity
+
+
+.. image:: https://raw.githubusercontent.com/sequana/fastqc/main/sequana_pipelines/fastqc/dag.png
 
 
 Details
@@ -124,7 +124,7 @@ ready-to-use HTML reports, etc
 Rules and configuration details
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Here is the `latest documented configuration file <https://raw.githubusercontent.com/sequana/fastqc/master/sequana_pipelines/fastqc/config.yaml>`_
+Here is the `latest documented configuration file <https://raw.githubusercontent.com/sequana/fastqc/main/sequana_pipelines/fastqc/config.yaml>`_
 to be used with the pipeline. Each rule used in the pipeline may have a section in the configuration file. 
 
 Changelog
@@ -132,6 +132,8 @@ Changelog
 ========= ====================================================================
 Version   Description
 ========= ====================================================================
+1.6.0     * Fixed falco output error and use singularity containers
+1.5.0     * removed modules completely.
 1.4.2     * simplified pipeline (suppress setup and use existing wrapper)
 1.4.1     * simplified pipeline with wrappers/rules
 1.4.0     * This version uses sequana 0.12.0 and new sequana-wrappers 

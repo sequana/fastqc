@@ -11,34 +11,12 @@
 input_directory: '.'
 input_pattern: '*fastq.gz'
 
-################################################################################
-# extra_prefixes_to_strip
-#
-# In most cases, the input_directory and input_pattern (and input_read_tag for paired analysis)
-# allows us to retrieve unique sample names. We automatically removed common prefixes for you.
-#
-# Sometimes, some prefixes are not common to all samples but still need to be removed
-# to get unique sample names or better output. You can provide extra prefixes to be removed
-# by uncommenting and filling the field extra_prefixes_to_strip.
-#
-# For instance, if you have files called prefix.mess.A.fastq.gz and prefix.B.fastq.gz
-# 'prefix.' will be removed automatically because it is common, but not 'mess'. 
-# use thoses prefixes in the left to right order ['prefix', 'mess'] or ['prefix.mess']
-#
-# extra_prefixes_to_strip: []
 
-
-################################################################################
-# sample_pattern
-#
-# You may have trailing words that are in sample names but not wanted. Consider
-# the filename A_mess.fastq.gz, you can get rid of _mess if it appears in all 
-# samples using a pattern as follows '{sample}_mess.fastq.gz
-#
-# uncomment and fill to use this option. Be aware that prefixes are not removed
-# if you use sample_pattern
-#
-# sample_pattern: '{sample}_mess.fastq.gz'
+# See sequana_pipetools.readthedocs.io for details about these 2 options
+# common prefixes are removed. addition prefixes may be removed here
+#extra_prefixes_to_strip = []
+# in special cases, sample names can be extracted with a pattern
+#sample_pattern: '{sample}.fastq.gz'
 
 ##############################################################################
 # general section

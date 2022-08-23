@@ -76,6 +76,8 @@ if 'general' in config and 'method_choice' in config['general'] and \
         params:
             options=config['falco']['options'],
             working_directory="samples/{sample}"
+        container:
+            "https://zenodo.org/record/7014954/files/falco_1.0.0.img"
         resources:
             **config['falco']['resources']
         wrapper:
@@ -97,6 +99,8 @@ else:
             working_directory="samples/{sample}"
         resources:
             **config['fastqc']['resources']
+        container:
+            "https://zenodo.org/record/7015004/files/fastqc_0.11.9-py3.img"
         wrapper:
             "main/wrappers/fastqc"
     __multiqc__input = expand("samples/{sample}/fastqc.done", sample=manager.samples)
@@ -174,7 +178,7 @@ include: sm.modules['rulegraph']
 
 
 rule plotting_and_stats:
-    input: expand("samples/{sample}/" + f"{METHOD}.done", sample=manager.samples)
+    input: expand("samples/{sample}/" + f"{METHOD}.log", sample=manager.samples)
     output: "outputs/summary.png", "outputs/summary.json"
     resources:
         **config["multiqc"]["resources"]

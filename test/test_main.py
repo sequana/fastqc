@@ -26,7 +26,7 @@ def test_standalone_script():
     m.main()
 
 
-def test_full():
+def test_full_fastqc():
 
     with tempfile.TemporaryDirectory() as directory:
         wk = directory
@@ -48,3 +48,23 @@ def test_full():
 def test_version():
     cmd = "sequana_fastqc --version"
     subprocess.call(cmd.split())
+
+def test_full_falco():
+
+    with tempfile.TemporaryDirectory() as directory:
+        wk = directory
+
+        cmd = "sequana_fastqc --input-directory {} "
+        cmd += "--working-directory {} --run-mode local --force --method falco"
+        cmd = cmd.format(sharedir, wk)
+        subprocess.call(cmd.split())
+
+
+        cmd = "snakemake -s fastqc.rules --wrapper-prefix https://raw.githubusercontent.com/sequana/sequana-wrappers/  -p --cores 2 "
+
+        stat = subprocess.call(cmd.split(), cwd=wk)
+
+        assert os.path.exists(wk + "/summary.html")
+        assert os.path.exists(wk + "/tree.html")
+        assert os.path.exists(wk + "/multiqc/multiqc_report.html")
+
