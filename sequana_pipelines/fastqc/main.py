@@ -108,9 +108,7 @@ def main(args=None):
         manager.exists(cfg.input_directory)
     # finalise the command and save it; copy the snakemake. update the config
     # file and save it.
-    # Since input can be bam, fast5, mgi, the standard FastQFactory may not
-    # work, so we only check presence of input files. 
-    manager.teardown(check_fastq_files=False)
+    manager.teardown()
 
     if options.run:
         subprocess.Popen(["sh", '{}.sh'.format(NAME)], cwd=options.workdir)
