@@ -21,6 +21,8 @@ input_pattern: '*fastq.gz'
 ##############################################################################
 # general section
 #
+# Choose one of the standard method to perform QC of your fastq data
+#
 # method_choice__ = ['fastqc', 'falco']
 general:
     method_choice: fastqc
@@ -36,6 +38,13 @@ fastqc:
     threads: 4
     resources:
         mem: 8G
+
+##############################################################################
+# Falco section
+#
+# :Parameters:
+#
+# - options: string with any valid FastQC options
 falco:
     options: ''
     threads: 4
