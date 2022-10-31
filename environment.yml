@@ -1,0 +1,12 @@
+name: sequana_fastqc
+
+channels:
+- bioconda
+- conda-forge
+- defaults
+- r
+
+dependencies:
+- fastqc
+- falco
+- graphviz
