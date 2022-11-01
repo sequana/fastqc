@@ -7,7 +7,7 @@
     :alt: JOSS (journal of open source software) DOI
 
 .. image:: https://github.com/sequana/fastqc/actions/workflows/main.yml/badge.svg
-   :target: https://github.com/sequana/fastqc/actions/workflows    
+   :target: https://github.com/sequana/fastqc/actions/workflows/main.yml
 
 
 
@@ -132,6 +132,8 @@ Changelog
 ========= ====================================================================
 Version   Description
 ========= ====================================================================
+1.6.1     * pin sequana version to 1.4.4 to force usage of new fastqc module
+            to fix falco. Updated config documentation.
 1.6.0     * Fixed falco output error and use singularity containers
 1.5.0     * removed modules completely.
 1.4.2     * simplified pipeline (suppress setup and use existing wrapper)

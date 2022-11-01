@@ -1,8 +1,8 @@
 name: sequana_fastqc
 
 channels:
-- bioconda
 - conda-forge
+- bioconda
 - defaults
 - r
 
