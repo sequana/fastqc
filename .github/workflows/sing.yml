@@ -1,4 +1,4 @@
-name: Singularity Run
+name: Apptainer Run
 
 on:
   push:
@@ -53,6 +53,6 @@ jobs:
 
     - name: testing
       run: |
-        sequana_fastqc --input-directory test/data/ --use-singularity && cd fastqc && sh fastqc.sh
+        sequana_fastqc --input-directory test/data/ --use-apptainer && cd fastqc && sh fastqc.sh
 
 
