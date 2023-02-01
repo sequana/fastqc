@@ -22,7 +22,7 @@ from sequana.utils.tree import HTMLDirectory
 from sequana_pipetools import PipelineManager
 from sequana_pipetools import snaketools as sm
 
-# This must be defined before the include
+
 configfile: "config.yaml"
 
 manager = PipelineManager("fastqc", config)
