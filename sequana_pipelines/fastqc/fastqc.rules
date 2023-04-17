@@ -181,8 +181,6 @@ rule rulegraph:
     params:
         mapper = {"multiqc": "../multiqc/multiqc_report.html"} if config['multiqc']['do'] else {},
         configname = "config.yaml"
-    container:
-        config['apptainers']['rulegraph']
     wrapper:
         f"{sequana_wrapper_branch}/wrappers/rulegraph"
 
