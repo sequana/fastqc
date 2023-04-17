@@ -23,6 +23,9 @@ mapping:
             "resources":
                 type: any
                 required: true
+    "apptainers":
+        type: any
+
 
     "multiqc":
         type: map
