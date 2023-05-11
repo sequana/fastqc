@@ -69,8 +69,10 @@ if 'general' in config and 'method_choice' in config['general'] and \
     METHOD = "falco"
 
     rule falco:
-        input: manager.getrawdata()
-        output: "samples/{sample}/summary.txt"
+        input:
+            manager.getrawdata()
+        output:
+            "samples/{sample}/summary.txt"
         log:
             "samples/{sample}/falco.log"
         threads:
@@ -90,8 +92,10 @@ else:
     METHOD = "fastqc"
 
     rule fastqc:
-        input: manager.getrawdata()
-        output: "samples/{sample}/fastqc.done"
+        input:
+            manager.getrawdata()
+        output:
+            "samples/{sample}/fastqc.done"
         log:
             "samples/{sample}/fastqc.log"
         threads:
@@ -172,17 +176,28 @@ if config['multiqc']['do']:
            "main/wrappers/multiqc"
 
 
-# ====================================================================== rulegraph 
+# ====================================================================== rulegraph
 
 rule rulegraph:
     input: str(manager.snakefile)
     output:
-        svg = ".sequana/rulegraph.svg"
+        svg = "rulegraph/rulegraph.dot"
     params:
         mapper = {"multiqc": "../multiqc/multiqc_report.html"} if config['multiqc']['do'] else {},
         configname = "config.yaml"
     wrapper:
         f"{sequana_wrapper_branch}/wrappers/rulegraph"
+
+
+rule dot2svg:
+    input:
+        "rulegraph/rulegraph.dot"
+    output:
+        ".sequana/rulegraph.svg"
+    container:
+        config['apptainers']['graphviz']
+    shell:
+        """dot -Tsvg {input} -o {output}"""
 
 
 rule plotting_and_stats:

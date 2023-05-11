@@ -22,6 +22,7 @@ input_pattern: '*fastq.gz'
 apptainers:
     falco: "https://zenodo.org/record/7014954/files/falco_1.0.0.img"
     fastqc: "https://zenodo.org/record/7015004/files/fastqc_0.11.9-py3.img"
+    graphviz: "https://zenodo.org/record/7927016/files/graphviz_2.43.0.img"
 
 
 ##############################################################################
