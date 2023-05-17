@@ -21,8 +21,8 @@ input_pattern: '*fastq.gz'
 
 apptainers:
     falco: "https://zenodo.org/record/7014954/files/falco_1.0.0.img"
-    fastqc: "https://zenodo.org/record/7015004/files/fastqc_0.11.9-py3.img"
-    graphviz: "https://zenodo.org/record/7927016/files/graphviz_2.43.0.img"
+    fastqc: "https://zenodo.org/record/7923780/files/fastqc_0.12.1.img"
+    graphviz: "https://zenodo.org/record/7928262/files/graphviz_7.0.5.img"
 
 
 ##############################################################################
@@ -30,7 +30,6 @@ apptainers:
 #
 # Choose one of the standard method to perform QC of your fastq data
 #
-# method_choice__ = ['fastqc', 'falco']
 general:
     method_choice: fastqc
 
