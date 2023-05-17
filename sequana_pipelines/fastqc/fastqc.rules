@@ -27,6 +27,8 @@ configfile: "config.yaml"
 
 manager = PipelineManager("fastqc", config)
 
+sequana_wrapper_branch = "main"
+
 # This is just for information. Not used in the pipeline but only for HTML rpeort
 # do we have illumina paired data with tag _R1_ ?
 R1 = [1 for x in manager.samples.values() if "_R1_" in x.split("/")[-1]]
@@ -67,8 +69,10 @@ if 'general' in config and 'method_choice' in config['general'] and \
     METHOD = "falco"
 
     rule falco:
-        input: manager.getrawdata()
-        output: "samples/{sample}/summary.txt"
+        input:
+            manager.getrawdata()
+        output:
+            "samples/{sample}/summary.txt"
         log:
             "samples/{sample}/falco.log"
         threads:
@@ -77,19 +81,21 @@ if 'general' in config and 'method_choice' in config['general'] and \
             options=config['falco']['options'],
             working_directory="samples/{sample}"
         container:
-            "https://zenodo.org/record/7014954/files/falco_1.0.0.img"
+            config['apptainers']['falco']
         resources:
             **config['falco']['resources']
         wrapper:
-            "main/wrappers/falco"
+            f"{sequana_wrapper_branch}/wrappers/falco"
     __multiqc__input = expand("samples/{sample}/summary.txt", sample=manager.samples)
 
 else:
     METHOD = "fastqc"
 
     rule fastqc:
-        input: manager.getrawdata()
-        output: "samples/{sample}/fastqc.done"
+        input:
+            manager.getrawdata()
+        output:
+            "samples/{sample}/fastqc.done"
         log:
             "samples/{sample}/fastqc.log"
         threads:
@@ -100,9 +106,9 @@ else:
         resources:
             **config['fastqc']['resources']
         container:
-            "https://zenodo.org/record/7015004/files/fastqc_0.11.9-py3.img"
+            config['apptainers']['fastqc']
         wrapper:
-            "main/wrappers/fastqc"
+            f"{sequana_wrapper_branch}/wrappers/fastqc"
     __multiqc__input = expand("samples/{sample}/fastqc.done", sample=manager.samples)
 
 
@@ -170,11 +176,28 @@ if config['multiqc']['do']:
            "main/wrappers/multiqc"
 
 
-# ====================================================================== rulegraph 
-sequana_rulegraph_mapper = {}
-if config['multiqc']['do']:
-    sequana_rulegraph_mapper["multiqc"] = "../multiqc/multiqc_report.html"
-include: sm.modules['rulegraph']
+# ====================================================================== rulegraph
+
+rule rulegraph:
+    input: str(manager.snakefile)
+    output:
+        svg = "rulegraph/rulegraph.dot"
+    params:
+        mapper = {"multiqc": "../multiqc/multiqc_report.html"} if config['multiqc']['do'] else {},
+        configname = "config.yaml"
+    wrapper:
+        f"{sequana_wrapper_branch}/wrappers/rulegraph"
+
+
+rule dot2svg:
+    input:
+        "rulegraph/rulegraph.dot"
+    output:
+        ".sequana/rulegraph.svg"
+    container:
+        config['apptainers']['graphviz']
+    shell:
+        """dot -Tsvg {input} -o {output}"""
 
 
 rule plotting_and_stats:

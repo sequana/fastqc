@@ -132,6 +132,8 @@ Changelog
 ========= ====================================================================
 Version   Description
 ========= ====================================================================
+1.7.0     * Use new rulegraph wrapper and new graphviz apptainer
+1.6.2     * slight refactorisation to use rulegraph wrapper
 1.6.1     * pin sequana version to 1.4.4 to force usage of new fastqc module
             to fix falco. Updated config documentation.
 1.6.0     * Fixed falco output error and use singularity containers

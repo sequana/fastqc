@@ -18,12 +18,18 @@ input_pattern: '*fastq.gz'
 # in special cases, sample names can be extracted with a pattern
 #sample_pattern: '{sample}.fastq.gz'
 
+
+apptainers:
+    falco: "https://zenodo.org/record/7014954/files/falco_1.0.0.img"
+    fastqc: "https://zenodo.org/record/7923780/files/fastqc_0.12.1.img"
+    graphviz: "https://zenodo.org/record/7928262/files/graphviz_7.0.5.img"
+
+
 ##############################################################################
 # general section
 #
 # Choose one of the standard method to perform QC of your fastq data
 #
-# method_choice__ = ['fastqc', 'falco']
 general:
     method_choice: fastqc
 
