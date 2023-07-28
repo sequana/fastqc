@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - dev
+  workflow_dispatch:
   pull_request:
     branches-ignore: []
   schedule:
@@ -16,7 +17,7 @@ jobs:
     strategy:
       max-parallel: 5
       matrix:
-        python: [3.7, 3.8, 3.9]
+        python: [3.8, 3.9, '3.10']
       fail-fast: false
 
 

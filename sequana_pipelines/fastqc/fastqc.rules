@@ -20,14 +20,13 @@ from sequana.utils.datatables_js import DataTable
 from sequana.utils.tree import HTMLDirectory
 
 from sequana_pipetools import PipelineManager
-from sequana_pipetools import snaketools as sm
 
 
 configfile: "config.yaml"
 
 manager = PipelineManager("fastqc", config)
 
-sequana_wrapper_branch = "main"
+
 
 # This is just for information. Not used in the pipeline but only for HTML rpeort
 # do we have illumina paired data with tag _R1_ ?
@@ -85,7 +84,7 @@ if 'general' in config and 'method_choice' in config['general'] and \
         resources:
             **config['falco']['resources']
         wrapper:
-            f"{sequana_wrapper_branch}/wrappers/falco"
+            f"{manager.wrappers}/wrappers/falco"
     __multiqc__input = expand("samples/{sample}/summary.txt", sample=manager.samples)
 
 else:
@@ -108,7 +107,7 @@ else:
         container:
             config['apptainers']['fastqc']
         wrapper:
-            f"{sequana_wrapper_branch}/wrappers/fastqc"
+            f"{manager.wrappers}/wrappers/fastqc"
     __multiqc__input = expand("samples/{sample}/fastqc.done", sample=manager.samples)
 
 
@@ -173,7 +172,7 @@ if config['multiqc']['do']:
         resources:
             **config["multiqc"]["resources"]
         wrapper:
-           "main/wrappers/multiqc"
+           f"{manager.wrappers}/wrappers/multiqc"
 
 
 # ====================================================================== rulegraph
@@ -186,7 +185,7 @@ rule rulegraph:
         mapper = {"multiqc": "../multiqc/multiqc_report.html"} if config['multiqc']['do'] else {},
         configname = "config.yaml"
     wrapper:
-        f"{sequana_wrapper_branch}/wrappers/rulegraph"
+        f"{manager.wrappers}/wrappers/rulegraph"
 
 
 rule dot2svg:
