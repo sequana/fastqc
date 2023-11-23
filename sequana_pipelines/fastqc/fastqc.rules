@@ -171,6 +171,8 @@ if config['multiqc']['do']:
            "multiqc/multiqc.log"
         resources:
             **config["multiqc"]["resources"]
+        container:
+            config['apptainers']['multiqc']
         wrapper:
            f"{manager.wrappers}/wrappers/multiqc"
 
@@ -364,7 +366,5 @@ onsuccess:
     shell("chmod -R g+w .")
 
 onerror:
-    from sequana_pipetools.errors import PipeError
-    p = PipeError("fastqc")
-    p.status()
+    manager.error_status()
 

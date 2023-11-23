@@ -10,13 +10,16 @@
    :target: https://github.com/sequana/fastqc/actions/workflows/main.yml
 
 
+.. image:: https://img.shields.io/badge/python-3.8%20%7C%203.9%20%7C3.10-blue.svg
+    :target: https://pypi.python.org/pypi/sequana
+    :alt: Python 3.8 | 3.9 | 3.10
 
 This is is the **fastqc** pipeline from the `Sequana <https://sequana.readthedocs.org>`_ projet
 
 :Overview: Runs fastqc and multiqc on a set of Sequencing data to produce control quality reports
 :Input: A set of FastQ files (paired or single-end) compressed or not
-:Output: an HTML file summary.html (individual fastqc reports, mutli-samples report)
-:Status: production
+:Output: An HTML file summary.html (individual fastqc reports, mutli-samples report)
+:Status: Production
 :Wiki: https://github.com/sequana/fastqc/wiki
 :Documentation: This README file, the Wiki from the github repository (link above) and https://sequana.readthedocs.io
 :Citation: Cokelaer et al, (2017), 'Sequana': a Set of Snakemake NGS pipelines, Journal of Open Source Software, 2(16), 352, JOSS DOI https://doi:10.21105/joss.00352
@@ -34,21 +37,18 @@ You will need third-party software such as fastqc. Please see below for details.
 Usage
 ~~~~~
 
-This command will scan all files ending in .fastq.gz found in the local
-directory, create a directory called fastqc/ where a snakemake pipeline is
-launched automatically. Depending on the number of files and their sizes, the
-process may be long::
+If you have a set of FastQ files in a data/ directory, type::
 
-    sequana_fastqc --run
+    sequana_fastqc --input-directory data
 
 To know more about the options (e.g., add a different pattern to restrict the
 execution to a subset of the input files, change the output/working directory,
 etc)::
 
     sequana_fastqc --help
-    sequana_fastqc --input-directory DATAPATH
 
-This creates a directory **fastqc**. You just need to execute the pipeline::
+The call to sequana_fastqc creates a directory **fastqc**. Then, you go to the 
+working directory and execute the pipeline as follows::
 
     cd fastqc
     sh fastqc.sh  # for a local run
@@ -94,12 +94,12 @@ This pipelines requires the following executable(s):
 - falco (optional)
 
 
-For Linux users, we provide singularity images available through within the **damona** project (https://damona.readthedocs.io). 
+For Linux users, we provide apptainer/singularity images available through the **damona** project (https://damona.readthedocs.io). 
 
-To mak use of them, initiliase the pipeline with the --use-singularity option and everything should be downloaded
+To make use of them, initiliase the pipeline with the --use-apptainer option and everything should be downloaded
 automatically for you, which also guarantees reproducibility::
 
-    sequana_fastqc --input-directory data --use-singularity
+    sequana_fastqc --input-directory data --use-apptainer --apptainer-prefix ~/images
 
 
 .. image:: https://raw.githubusercontent.com/sequana/fastqc/main/sequana_pipelines/fastqc/dag.png
@@ -132,6 +132,9 @@ Changelog
 ========= ====================================================================
 Version   Description
 ========= ====================================================================
+1.8.0     * uses pyproject instead of setuptools
+          * uses click instead of argparse and newest sequana_pipetools 
+            (0.16.0)
 1.7.1     * Set wrapper version in the config based on new sequana_pipetools
             feature
 1.7.0     * Use new rulegraph wrapper and new graphviz apptainer
