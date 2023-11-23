@@ -2,8 +2,6 @@
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
-
-#maintainer ?#maintainer email
 [tool.poetry]
 name = "sequana-fastqc"
 version = "1.8.0"
@@ -20,7 +18,7 @@ classifiers = [
         "Intended Audience :: Developers",
         "Intended Audience :: Science/Research",
         "License :: OSI Approved :: BSD License",
-        "Operating System :: OS Independent",
+        "Operating System :: POSIX :: Linux",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
@@ -38,6 +36,7 @@ packages = [
 python = ">=3.8,<4.0"
 sequana = ">=0.15.0"
 sequana_pipetools = ">=0.16.0"
+click-completion = "^0.5.2"
 
 
 [tool.poetry.scripts]
