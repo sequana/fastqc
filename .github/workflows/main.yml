@@ -9,7 +9,7 @@ on:
   pull_request:
     branches-ignore: []
   schedule:
-    - cron: '0 0 1 * *'
+    - cron: '0 0 8 * *'
 
 jobs:
   build-linux:
@@ -37,11 +37,12 @@ jobs:
           extra-specs: |
             python=${{ matrix.python }}
 
-
     - name: install package itself
       shell: bash -l {0}
       run: |
         pip install .
+        pip install "pulp==2.7.0" --no-deps
+
 
     - name: Install dependencies
       shell: bash -l {0}

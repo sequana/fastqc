@@ -256,13 +256,15 @@ localrules: rulegraph
 
 onsuccess:
 
+    from sequana.modules_report.summary import SequanaReport
+    from sequana import logger
+    logger.setLevel("INFO")
+
     # Create the tree.html file with all fastqc reports
     hh = HTMLDirectory(".", pattern="fastqc.html")
     with open("tree.html", "w") as fout:
         fout.write(hh.get_html())
 
-    from sequana import logger
-    logger.setLevel("INFO")
 
     # This should create the stats plot and the Makefile
     manager.teardown()
@@ -323,22 +325,13 @@ onsuccess:
     htmltable2 = datatable.create_datatable(style="width: 20%; float:left" )
 
 
-    from sequana.modules_report.summary import SummaryModule2
-    from sequana_pipelines import fastqc
-    data = {
-            "name": manager.name,
-            "rulegraph": ".sequana/rulegraph.svg",
-            "stats": "stats.txt",
-            "pipeline_version": fastqc.version
-
-         }
 
     # Here the is main HTML page report
     contents = f"""<h2> General information</h2>
                   <div style="float:left; width:30%">{js2} {htmltable2}</div>
                """
 
-    image = SummaryModule2.png_to_embedded_png("dummy", "outputs/summary.png", 
+    image = SequanaReport.png_to_embedded_png("dummy", "outputs/summary.png", 
                 style="width:80%; height:40%")
 
     contents += f"""<div style="float:right; width:65%">
@@ -359,12 +352,13 @@ onsuccess:
     contents += hh.get_html()
 
 
-    s = SummaryModule2(data, intro=contents)
+    data = manager.getmetadata() 
+    s = SequanaReport(data, intro=contents)
 
     # finally, some cleanup
     shell("rm -rf rulegraph")   # embedded in report
     shell("chmod -R g+w .")
 
 onerror:
-    manager.error_status()
+    manager.onerror()
 

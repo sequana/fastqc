@@ -49,6 +49,7 @@ jobs:
     - name: install package itself
       run: |
          pip install .
+         pip install "pulp==2.7.0" --no-deps
 
     - name: testing
       run: |
