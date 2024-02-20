@@ -132,6 +132,7 @@ Changelog
 ========= ====================================================================
 Version   Description
 ========= ====================================================================
+1.8.2     * Fix the onerror typo in the pipeline, fix CI.
 1.8.1     * update __init__ (version)
 1.8.0     * uses pyproject instead of setuptools
           * uses click instead of argparse and newest sequana_pipetools 

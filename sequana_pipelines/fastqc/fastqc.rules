@@ -366,5 +366,5 @@ onsuccess:
     shell("chmod -R g+w .")
 
 onerror:
-    manager.error_status()
+    manager.onerror()
 

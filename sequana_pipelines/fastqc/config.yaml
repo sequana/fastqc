@@ -32,6 +32,8 @@ apptainers:
 #
 # Choose one of the standard method to perform QC of your fastq data
 #
+# method_choice__ = ["fastqc", "falco"]
+#
 general:
     method_choice: fastqc
 
