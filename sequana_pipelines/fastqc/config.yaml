@@ -11,7 +11,7 @@ sequana_wrappers: "v23.11.18"
 
 input_directory: '.'
 input_pattern: '*fastq.gz'
-
+exclude_pattern:
 
 # See sequana_pipetools.readthedocs.io for details about these 2 options
 # common prefixes are removed. addition prefixes may be removed here

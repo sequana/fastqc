@@ -66,6 +66,7 @@ def main(**options):
     # Fill the config file with data and specific options
     cfg = manager.config.config
     cfg.input_pattern = options.input_pattern
+    cfg.exclude_pattern = options.exclude_pattern
     cfg.input_directory = os.path.abspath(options.input_directory)
     cfg.multiqc.do = not options.skip_multiqc
     cfg.general.method_choice = options.method

@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "sequana-fastqc"
-version = "1.8.2"
+version = "1.9.0"
 description = "A multi-sample fastqc pipeline from Sequana project"
 authors = ["Sequana Team"]
 license = "BSD-3"
@@ -22,6 +22,7 @@ classifiers = [
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: Scientific/Engineering :: Bio-Informatics",
         "Topic :: Scientific/Engineering :: Information Analysis",
@@ -35,7 +36,7 @@ packages = [
 [tool.poetry.dependencies]
 python = ">=3.8,<4.0"
 sequana = ">=0.15.0"
-sequana_pipetools = ">=0.16.0"
+sequana_pipetools = ">=1.1.0"
 click-completion = "^0.5.2"
 
 
