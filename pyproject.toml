@@ -45,7 +45,7 @@ sequana_fastqc = "sequana_pipelines.fastqc.main:main"
 
 
 [tool.poetry.group.dev.dependencies]
-black = "^23.7.0"
+black = ">=23.7,<25.0"
 pytest = "^7.4.0"
 mock = "^5.1.0"
 pytest-mock = "^3.11.1"
