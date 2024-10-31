@@ -11,6 +11,9 @@ mapping:
     "input_pattern":
         type: str
         required: False
+    "exclude_pattern":
+        type: str
+        required: False
     "fastqc":
         type: map
         mapping:
