@@ -10,4 +10,4 @@ dependencies:
 - fastqc
 - falco
 - graphviz
-- pulp>=2.7
+- pulp>=2.8
