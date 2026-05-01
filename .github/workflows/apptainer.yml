@@ -35,11 +35,13 @@ jobs:
         path: ~/.apptainer/cache
         key: ${{ runner.os }}-apptainer-images-v1
 
-    # Install Apptainer from the default Ubuntu apt repositories
+    # Install Apptainer from GitHub releases (avoids flaky Launchpad PPA)
     - name: Install Apptainer
       run: |
-        sudo apt-get update
-        sudo apt-get install -y apptainer
+        APPTAINER_VERSION=$(curl -s https://api.github.com/repos/apptainer/apptainer/releases/latest \
+          | grep '"tag_name"' | cut -d'"' -f4 | sed 's/v//')
+        wget -q "https://github.com/apptainer/apptainer/releases/download/v${APPTAINER_VERSION}/apptainer_${APPTAINER_VERSION}_amd64.deb"
+        sudo apt-get install -y "./apptainer_${APPTAINER_VERSION}_amd64.deb"
         apptainer --version
 
     # Checkout repository
